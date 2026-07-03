@@ -14,9 +14,17 @@ SYS:KUEPER:kueper-com      Volltext von Entwuerfen, Essays, Analysen
 SSF                        spaeter Lernmodule, Fortschritt, Mitgliedschaft
 ```
 
+## Routen in Version 0.1
+
+- `/de`, `/en`, `/ko` - lokalisierte Startseiten
+- `/:locale/course` - Einfuehrungskurs mit Modulstatus und Fortschritt
+- `/:locale/kg` - KG-Explorer fuer `KD:KON:N1` und `CON:*`
+- `/:locale/documents` - Dokument-Viewer fuer `DOC:*`
+- `/:locale/legal/imprint`, `privacy`, `terms` - Legal-Referenzen aus KG/Dokumenten
+
 ## Funktionen in Version 0.1
 
-- mehrsprachige Routen: `/de`, `/en`, `/ko`
+- Legacy-Migration als Akademie-Struktur
 - Einfuehrungskurs als Frontend-Struktur
 - KG-Fassadenclient fuer `KD:KON:N1`, `CON:*` und `DOC:*`
 - Legal-Seiten als KG-/Dokument-Referenzen
