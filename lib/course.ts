@@ -4,6 +4,7 @@ export type CourseModule = {
   id: string;
   order: number;
   status: 'planned' | 'draft' | 'kg_pending';
+  progress: number;
   kgRefs: string[];
   title: Record<Locale, string>;
   summary: Record<Locale, string>;
@@ -14,6 +15,7 @@ export const introductoryCourse: CourseModule[] = [
     id: 'orientation',
     order: 1,
     status: 'draft',
+    progress: 35,
     kgRefs: ['KD:KON:N1'],
     title: { de: 'Orientierung', en: 'Orientation', ko: '방향 설정' },
     summary: {
@@ -23,21 +25,75 @@ export const introductoryCourse: CourseModule[] = [
     },
   },
   {
-    id: 'zeitform',
+    id: 'polyphony',
     order: 2,
-    status: 'kg_pending',
-    kgRefs: ['CON:L1:zeitform'],
-    title: { de: 'Zeitform', en: 'Time form', ko: '시간 형식' },
+    status: 'draft',
+    progress: 25,
+    kgRefs: ['LEGACY:simultane-polyphonie'],
+    title: { de: 'Simultane Polyphonie', en: 'Simultaneous polyphony', ko: '동시적 폴리포니' },
     summary: {
-      de: 'Wie Vergangenheit, Gegenwart und Zukunft in einem Denkrahmen angeordnet werden.',
-      en: 'How past, present, and future are arranged within a frame of thought.',
-      ko: '사고의 틀 안에서 과거, 현재, 미래가 배열되는 방식.',
+      de: 'Mehrere Linien koennen gleichzeitig bestehen, ohne auf eine einzige Stimme reduziert zu werden.',
+      en: 'Several lines can coexist without being reduced to one voice.',
+      ko: '여러 선이 하나의 목소리로 환원되지 않고 동시에 존재할 수 있다.',
+    },
+  },
+  {
+    id: 'complex-simplicity',
+    order: 3,
+    status: 'draft',
+    progress: 20,
+    kgRefs: ['LEGACY:komplexe-einfachheit'],
+    title: { de: 'Komplexe Einfachheit', en: 'Complex simplicity', ko: '복합적 단순성' },
+    summary: {
+      de: 'Einfache Motive entfalten komplexe Ordnungen, wenn sie in Beziehung gesetzt werden.',
+      en: 'Simple motifs unfold complex orders when placed into relation.',
+      ko: '단순한 동기는 관계 속에서 복잡한 질서를 펼친다.',
+    },
+  },
+  {
+    id: 'plastic-time',
+    order: 4,
+    status: 'kg_pending',
+    progress: 10,
+    kgRefs: ['CON:L1:zeitform'],
+    title: { de: 'Plastische Zeit', en: 'Plastic time', ko: '가소적 시간' },
+    summary: {
+      de: 'Zeit wird nicht nur gemessen, sondern in Denkrahmen geformt und unterschiedlich erlebbar.',
+      en: 'Time is not only measured; it is shaped within frames of thought and experienced differently.',
+      ko: '시간은 측정될 뿐 아니라 사고의 틀 안에서 형성되고 다르게 경험된다.',
+    },
+  },
+  {
+    id: 'unfinished',
+    order: 5,
+    status: 'draft',
+    progress: 15,
+    kgRefs: ['LEGACY:kreative-unvollendung'],
+    title: { de: 'Kreative Unvollendung', en: 'Creative incompletion', ko: '창조적 미완성' },
+    summary: {
+      de: 'Unvollstaendigkeit wird als Oeffnung fuer Entwicklung und Antwort betrachtet.',
+      en: 'Incompletion is treated as an opening for development and response.',
+      ko: '미완성은 발전과 응답을 여는 구조로 다루어진다.',
+    },
+  },
+  {
+    id: 'counterpoint-awareness',
+    order: 6,
+    status: 'draft',
+    progress: 15,
+    kgRefs: ['LEGACY:kontrapunktisches-bewusstsein'],
+    title: { de: 'Kontrapunktisches Bewusstsein', en: 'Contrapuntal awareness', ko: '대위법적 인식' },
+    summary: {
+      de: 'Gegensaetze werden sichtbar gehalten, statt sie vorschnell auf eine Loesung zu reduzieren.',
+      en: 'Opposites are kept visible instead of being reduced too quickly to one solution.',
+      ko: '대립은 하나의 해답으로 성급히 환원되지 않고 보이는 상태로 유지된다.',
     },
   },
   {
     id: 'avi-punkt',
-    order: 3,
+    order: 7,
     status: 'kg_pending',
+    progress: 5,
     kgRefs: ['CON:L1:avi-punkt'],
     title: { de: 'AVI-Punkt', en: 'AVI point', ko: 'AVI 지점' },
     summary: {
@@ -48,8 +104,9 @@ export const introductoryCourse: CourseModule[] = [
   },
   {
     id: 'oem',
-    order: 4,
+    order: 8,
     status: 'kg_pending',
+    progress: 5,
     kgRefs: ['CON:L1:oem'],
     title: { de: 'OEM', en: 'OEM', ko: 'OEM' },
     summary: {
@@ -60,8 +117,9 @@ export const introductoryCourse: CourseModule[] = [
   },
   {
     id: 'paradigms',
-    order: 5,
+    order: 9,
     status: 'kg_pending',
+    progress: 5,
     kgRefs: ['CON:L1:paradigma-1', 'CON:L1:paradigma-2', 'CON:L1:paradigma-3'],
     title: { de: 'Drei Paradigmen', en: 'Three paradigms', ko: '세 가지 패러다임' },
     summary: {
@@ -71,3 +129,8 @@ export const introductoryCourse: CourseModule[] = [
     },
   },
 ];
+
+export function totalCourseProgress(): number {
+  const sum = introductoryCourse.reduce((acc, module) => acc + module.progress, 0);
+  return Math.round(sum / introductoryCourse.length);
+}
