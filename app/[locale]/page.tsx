@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getContracomologyConcepts, getContracomologyDocuments, getContracomologyDomains, resolveArchive } from '@/lib/kg';
-import { introductoryCourse } from '@/lib/course';
+import { introductoryCourse, totalCourseProgress } from '@/lib/course';
 import { isLocale, localeLabel, locales, type Locale, ui } from '@/lib/i18n';
 
 export const revalidate = 3600;
@@ -17,6 +17,7 @@ export default async function LocaleHome({ params }: { params: Promise<{ locale:
     getContracomologyDocuments(),
   ]);
   const domain = domains[0] ?? null;
+  const progress = totalCourseProgress();
 
   return (
     <main className="shell">
@@ -24,6 +25,8 @@ export default async function LocaleHome({ params }: { params: Promise<{ locale:
         <Link className="brand" href={`/${locale}`}>Contracomology</Link>
         <nav className="nav">
           <Link href={`/${locale}/course`}>{t.course}</Link>
+          <Link href={`/${locale}/kg`}>{t.kgExplorer}</Link>
+          <Link href={`/${locale}/documents`}>{t.documents}</Link>
           <Link href={`/${locale}/legal/imprint`}>{t.legal}</Link>
           <span className="langs">
             {locales.map((l) => (
@@ -38,22 +41,25 @@ export default async function LocaleHome({ params }: { params: Promise<{ locale:
       <section className="hero">
         <div>
           <p className="eyebrow">{t.eyebrow}</p>
+          <p className="lede">{t.legacyClaim}</p>
           <h1>{t.title}</h1>
           <p className="lede">{domain?.description ?? t.claim}</p>
         </div>
         <aside className="card">
           <p className="meta">SYS:KUEPER:contracomology</p>
           <p>{t.claim}</p>
-          <Link className="cta" href={`/${locale}/course`}>{t.startCourse}</Link>
+          <p className="meta">{t.progress}: {progress}%</p>
+          <Link className="cta" href={`/${locale}/course`}>{t.startCourse}</Link>{' '}
+          <Link className="cta" href={`/${locale}/kg`}>{t.openExplorer}</Link>
         </aside>
       </section>
 
       <section>
-        <h2>{t.course}</h2>
+        <h2>{t.academy}</h2>
         <div className="grid">
-          {introductoryCourse.slice(0, 3).map((module) => (
+          {introductoryCourse.slice(0, 6).map((module) => (
             <article className="card" key={module.id}>
-              <p className="meta">{String(module.order).padStart(2, '0')} · {module.status}</p>
+              <p className="meta">{String(module.order).padStart(2, '0')} · {module.status} · {module.progress}%</p>
               <h3>{module.title[locale]}</h3>
               <p>{module.summary[locale]}</p>
               <p className="meta">{module.kgRefs.join(' · ')}</p>
@@ -63,21 +69,30 @@ export default async function LocaleHome({ params }: { params: Promise<{ locale:
       </section>
 
       <section>
-        <h2>{t.concepts}</h2>
-        <div className="list">
-          {concepts.length ? concepts.map((c) => (
-            <article className="item" key={c.id}>
-              <h3>{c.name}</h3>
-              <p className="meta">{c.id}</p>
-            </article>
-          )) : <p className="empty">{t.emptyDomain}</p>}
+        <h2>{t.kgExplorer}</h2>
+        <div className="grid">
+          <article className="card">
+            <h3>{t.concepts}</h3>
+            <p className="meta">{concepts.length} Records</p>
+            <Link className="cta" href={`/${locale}/kg`}>{t.open}</Link>
+          </article>
+          <article className="card">
+            <h3>{t.documents}</h3>
+            <p className="meta">{documents.length} Records</p>
+            <Link className="cta" href={`/${locale}/documents`}>{t.openDocuments}</Link>
+          </article>
+          <article className="card">
+            <h3>{t.source}</h3>
+            <p className="meta">KD:KON:N1</p>
+            <p>{domain?.title ?? t.emptyDomain}</p>
+          </article>
         </div>
       </section>
 
       <section>
         <h2>{t.documents}</h2>
         <div className="list">
-          {documents.length ? documents.map((d) => {
+          {documents.length ? documents.slice(0, 5).map((d) => {
             const archive = resolveArchive(d);
             return (
               <article className="item" key={d.id}>
