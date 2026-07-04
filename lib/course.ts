@@ -108,11 +108,11 @@ export const introductoryCourse: CourseModule[] = [
     status: 'kg_pending',
     progress: 5,
     kgRefs: ['CON:L1:oem'],
-    title: { de: 'OEM', en: 'OEM', ko: 'OEM' },
+    title: { de: 'Omnizedentes Entfaltungsmodul', en: 'Omnizedent Unfolding Module', ko: 'Omnizedente 전개 모듈' },
     summary: {
-      de: 'Orientierungs- und Erkenntnismodell als Arbeitsrahmen.',
-      en: 'Orientation and epistemic model as a working frame.',
-      ko: '작업 프레임으로서의 방향 설정 및 인식 모델.',
+      de: 'Strukturelle Einheit, die einen vollständigen Transformationsprozess durchläuft — von der Offenheit durch den Phasenübergang bis zur veränderten Offenheit. Kein Zustand, sondern ein Prozess.',
+      en: 'Structural unit that undergoes a complete transformation process — from openness through the phase transition to an altered openness. Not a state, but a process.',
+      ko: '완전한 변환 과정을 거치는 구조적 단위 — 개방성에서 위상 전환을 통해 변화된 개방성으로. 상태가 아니라 과정.',
     },
   },
   {

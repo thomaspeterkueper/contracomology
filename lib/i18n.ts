@@ -12,12 +12,12 @@ export function localeLabel(locale: Locale): string {
 
 export const ui = {
   de: {
-    eyebrow: 'Contracomology',
+    eyebrow: 'Analytisches Framework · Musiktheorie · Literatur',
     title: 'Kontrakomologie',
-    subtitle: 'Ein mehrsprachiges Lern- und Orientierungsportal.',
-    legacyClaim: 'Wo Bach den Urknall trifft.',
+    subtitle: 'Analytische Methode zur Beschreibung von Zeitstrukturen in Musik und Literatur.',
+    legacyClaim: '',
     claim:
-      'Die Kontrakomologie erkundet die kontrapunktische Struktur von Wirklichkeit, Denken, Zeit, Musik und Orientierung.',
+      'Die Kontrakomologie beschreibt, wie Werke Zeit erzeugen — nicht in welcher Zeit sie existieren. Sie entwickelt ein präzises Vokabular für Zeitstrukturen in Musik und Literatur.',
     course: 'Einführungskurs',
     academy: 'Akademie',
     kgExplorer: 'Begriffe',
@@ -37,12 +37,12 @@ export const ui = {
       'Rechtliche Angaben zu Anbieter, Kontakt und Datenschutzhinweisen.',
   },
   en: {
-    eyebrow: 'Contracomology',
+    eyebrow: 'Analytical Framework · Music Theory · Literature',
     title: 'Contracomology',
-    subtitle: 'A multilingual learning and orientation portal.',
-    legacyClaim: 'Where Bach meets the Big Bang.',
+    subtitle: 'Analytical method for describing time structures in music and literature.',
+    legacyClaim: '',
     claim:
-      'Contracomology explores the contrapuntal structure of reality, thought, time, music, and orientation.',
+      'Contracomology describes how works generate time — not in what time they exist. It develops a precise vocabulary for time structures in music and literature.',
     course: 'Introductory course',
     academy: 'Academy',
     kgExplorer: 'Concepts',
@@ -62,12 +62,12 @@ export const ui = {
       'Legal information about provider, contact, and privacy notes.',
   },
   ko: {
-    eyebrow: 'Contracomology',
+    eyebrow: '분석 프레임워크 · 음악 이론 · 문학',
     title: 'Contracomology',
-    subtitle: '다국어 학습 및 방향 설정 포털.',
-    legacyClaim: '바흐가 빅뱅과 만나는 곳.',
+    subtitle: '음악과 문학의 시간 구조를 기술하는 분석적 방법론.',
+    legacyClaim: '',
     claim:
-      'Contracomology는 현실, 사고, 시간, 음악, 방향 설정의 대위법적 구조를 탐구합니다.',
+      'Contracomology는 작품이 어떻게 시간을 생성하는지를 기술합니다. 음악과 문학의 시간 구조를 위한 정밀한 어휘를 발전시킵니다.',
     course: '입문 과정',
     academy: '아카데미',
     kgExplorer: '개념',

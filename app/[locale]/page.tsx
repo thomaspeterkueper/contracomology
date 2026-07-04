@@ -32,27 +32,14 @@ export default async function LocaleHome({ params }: { params: Promise<{ locale:
         <div>
           <p className="eyebrow">{t.eyebrow}</p>
           <h1>{t.title}</h1>
-          <p className="lede">{t.legacyClaim}</p>
           <p className="lede">{t.claim}</p>
         </div>
         <aside className="card">
-          <p className="eyebrow">Academy</p>
-          <p>Eine Akademie fuer kontrapunktisches Denken: Musik, Zeit, Wirklichkeit, Literatur, Spiel und Orientierung.</p>
+          <p className="eyebrow">{t.academy}</p>
+          <p>{t.subtitle}</p>
           <Link className="cta" href={`/${locale}/course`}>{t.startCourse}</Link>{' '}
           <Link className="cta" href={`/${locale}/documents`}>{t.openDocuments}</Link>
         </aside>
-      </section>
-
-      <section>
-        <h2>Die fuenf Prinzipien</h2>
-        <div className="grid">
-          {legacyPrinciples.map((principle) => (
-            <article className="card" key={principle}>
-              <h3>{principle}</h3>
-              <p>Ein Grundmotiv der Kontrakomologie, das im Kurs weiter entfaltet wird.</p>
-            </article>
-          ))}
-        </div>
       </section>
 
       <section>
@@ -60,7 +47,6 @@ export default async function LocaleHome({ params }: { params: Promise<{ locale:
         <div className="grid">
           {publicCourses.map((course) => (
             <article className="card" key={course.slug}>
-              <p className="meta">{course.origin}</p>
               <h3>{course.title[locale]}</h3>
               <p>{course.subtitle[locale]}</p>
               <Link className="cta" href={`/${locale}/course#${course.slug}`}>{t.open}</Link>
@@ -70,11 +56,23 @@ export default async function LocaleHome({ params }: { params: Promise<{ locale:
       </section>
 
       <section>
-        <h2>Die drei Meister</h2>
+        <h2>{locale === 'de' ? 'Drei Paradigmata' : locale === 'en' ? 'Three Paradigms' : '세 가지 패러다임'}</h2>
         <div className="grid">
-          <article className="card"><h3>Johann Sebastian Bach</h3><p>Mathematischer Kontrapunkt und die Kunst der Fuge.</p></article>
-          <article className="card"><h3>Richard Wagner</h3><p>Leitmotive, grosse Zeitraeume und musikalische Kosmologie.</p></article>
-          <article className="card"><h3>Ludwig van Beethoven</h3><p>Entwicklung, Transformation und spaete Verdichtung.</p></article>
+          <article className="card">
+            <p className="meta">{locale === 'de' ? 'Objektiv-strukturell' : locale === 'en' ? 'Objective-structural' : '객관적-구조적'}</p>
+            <h3>Bach</h3>
+            <p>{locale === 'de' ? 'Mehrere vollständige Stimmen, gleichzeitig, gleichwertig. Zeitarchitektur ohne subjektives Zentrum.' : locale === 'en' ? 'Multiple complete voices, simultaneous, equal. Time architecture without a subjective centre.' : '동시에 존재하는 여러 완전한 목소리들. 주관적 중심 없는 시간 구조.'}</p>
+          </article>
+          <article className="card">
+            <p className="meta">{locale === 'de' ? 'Psychologisch-persönlich' : locale === 'en' ? 'Psychological-personal' : '심리적-개인적'}</p>
+            <h3>Chopin</h3>
+            <p>{locale === 'de' ? 'Asymmetrische innere Vielstimmigkeit. Eine Stimme trägt die Hauptlast. Zeitarchitektur einer einzelnen Seele.' : locale === 'en' ? 'Asymmetric inner polyphony. One voice carries the main weight. The time architecture of a single soul.' : '비대칭적 내적 다성성. 하나의 목소리가 주된 무게를 담당한다.'}</p>
+          </article>
+          <article className="card">
+            <p className="meta">{locale === 'de' ? 'Kosmisch-mythologisch' : locale === 'en' ? 'Cosmic-mythological' : '우주적-신화적'}</p>
+            <h3>Wagner</h3>
+            <p>{locale === 'de' ? 'Zyklen von Aufbau und Kollaps über bis zu 15 Stunden. Leitmotive als vollständige Transformationsprozesse.' : locale === 'en' ? 'Cycles of construction and collapse over up to 15 hours. Leitmotifs as complete transformation processes.' : '최대 15시간에 걸친 구성과 붕괴의 순환. 완전한 변환 과정으로서의 라이트모티프.'}</p>
+          </article>
         </div>
       </section>
 
