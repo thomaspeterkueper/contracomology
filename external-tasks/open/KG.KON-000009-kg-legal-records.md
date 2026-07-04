@@ -38,3 +38,7 @@ sondern in den KG.
 
 `legalInfo` bleibt in `public-content.ts` als Übergangsfeld.
 Die Adresse darf erst geändert werden, nachdem der Kurator sie bestätigt hat.
+
+---
+**Geprüft:** 2026-07-04
+**Befund:** `DOC:KUE:LEGAL-IMPRINT-DE`, `DOC:KUE:LEGAL-PRIVACY-DE`, `DOC:KUE:LEGAL-TERMS-DE` sind nicht in `entity-registry-0.1.json` vorhanden (50 Records geprüft). Die in `lib/kg.ts` referenzierten `LEGAL_DOCUMENT_REFS` lösen derzeit ins Leere auf. Adresse in `legalInfo` (Mörfelder Landstraße 103, Frankfurt) ist unbestätigt.

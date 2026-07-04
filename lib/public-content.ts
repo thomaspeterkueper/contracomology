@@ -66,13 +66,6 @@ export const publicCourses: PublicCourse[] = [
   },
 ];
 
-export const legacyPrinciples = [
-  'Simultane Polyphonie',
-  'Komplexe Einfachheit',
-  'Plastische Zeit',
-  'Kreative Unvollendung',
-  'Kontrapunktisches Bewusstsein',
-];
 
 export const legalInfo = {
   responsible: 'Thomas Peter Küper',

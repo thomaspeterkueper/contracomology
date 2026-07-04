@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { publicCourses, legacyPrinciples } from '@/lib/public-content';
+import { publicCourses } from '@/lib/public-content';
 import { isLocale, localeLabel, locales, type Locale, ui } from '@/lib/i18n';
 
 export default async function LocaleHome({ params }: { params: Promise<{ locale: string }> }) {

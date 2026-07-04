@@ -18,3 +18,7 @@ Contracomology konsumiert diese Beschreibung fuer die Startseite und darf keinen
   "description": "[AUSSTEHEND - Kurator]"
 }
 ```
+
+---
+**Erledigt:** 2026-07-04
+**Befund:** `KD:KON:N1` liegt in `exports/knowledge-domains-0.1.json` mit `description`: "Orientierung im vom Kurator gesetzten Wissenschaftszweig Contracomology/Kontrakomologie. Werk-Theorie; kein empirischer Befund und nicht peer-reviewed."
