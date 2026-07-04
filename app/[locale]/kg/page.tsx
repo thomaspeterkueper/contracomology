@@ -32,12 +32,8 @@ export default async function KgPage({ params }: { params: Promise<{ locale: str
         <div>
           <p className="eyebrow">{t.kgExplorer}</p>
           <h1>{t.kgExplorer}</h1>
-          <p className="lede">{t.claim}</p>
+          <p className="lede">{t.kgLede}</p>
         </div>
-        <aside className="card">
-          <p className="meta">exports/knowledge-domains-0.1.json</p>
-          <p className="meta">exports/kxf-0.6.json</p>
-        </aside>
       </section>
 
       <section>

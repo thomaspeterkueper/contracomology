@@ -29,12 +29,8 @@ export default async function DocumentsPage({ params }: { params: Promise<{ loca
         <div>
           <p className="eyebrow">{t.documents}</p>
           <h1>{t.documents}</h1>
-          <p className="lede">{t.claim}</p>
+          <p className="lede">{t.docsLede}</p>
         </div>
-        <aside className="card">
-          <p className="meta">{t.source}</p>
-          <p>SYS:KUEPER:ota<br />SYS:KUEPER:kueper-com</p>
-        </aside>
       </section>
 
       <div className="list">

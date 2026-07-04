@@ -40,7 +40,6 @@ export default async function CoursePage({ params }: { params: Promise<{ locale:
         <div className="grid">
           {publicCourses.map((course) => (
             <article className="card" key={course.slug} id={course.slug}>
-              <p className="meta">{course.origin}</p>
               <h3>{course.title[locale]}</h3>
               <p>{course.subtitle[locale]}</p>
             </article>

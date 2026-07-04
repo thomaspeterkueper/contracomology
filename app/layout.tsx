@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata = {
   title: 'Contracomology',
-  description: 'Mehrsprachige Publikations- und Lernfassade ueber dem KUEPER Knowledge Graph.',
+  description: 'Analytisches Framework zur Beschreibung von Zeitstrukturen in Musik und Literatur. Entwickelt von Thomas Peter Küper.',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

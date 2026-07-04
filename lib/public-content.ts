@@ -79,7 +79,7 @@ export const legalInfo = {
   address: 'Mörfelder Landstraße 103, 60598 Frankfurt am Main, Germany',
   email: 'mail@thomas-kueper.de',
   disclaimerDe:
-    'Die Kontrakomologie ist eine theoretische und philosophische Erforschung von musikalischen Strukturen, Wirklichkeitsmustern und komplexen Systemen.',
+    'Die Kontrakomologie ist ein analytisches Framework zur Beschreibung von Zeitstrukturen in Musik und Literatur. Sie ist ein vom Kurator gesetzter Wissenschaftszweig — Theorie, keine empirische Forschung, keine externe Begutachtung.',
   disclaimerEn:
-    'Contracomology is a theoretical and philosophical exploration of musical structures, reality patterns, and complex systems.',
+    'Contracomology is an analytical framework for describing time structures in music and literature. It is a theoretical discipline established by its curator — theory, not empirical research, not externally peer-reviewed.',
 };
