@@ -1,6 +1,9 @@
 const KG_RAW =
   'https://raw.githubusercontent.com/thomaspeterkueper/kueper-knowledge-graph/main/exports';
 
+const KG_REGISTRY =
+  'https://raw.githubusercontent.com/thomaspeterkueper/kueper-knowledge-graph/main/registry';
+
 export const CONTRACOMOLOGY_DOMAIN = 'KON';
 export const LEGAL_DOCUMENT_REFS = {
   imprint: 'DOC:KUE:LEGAL-IMPRINT-DE',
@@ -79,6 +82,32 @@ export async function getContracomologyDocuments(): Promise<DocumentRef[]> {
       repo: d.repo ? String(d.repo) : undefined,
       path: d.path ? String(d.path) : undefined,
     }));
+}
+
+export type LegalInfo = {
+  responsible: string;
+  address: string;
+  email: string;
+};
+
+export async function getLegalInfo(): Promise<LegalInfo | null> {
+  try {
+    const res = await fetch(
+      `${KG_REGISTRY}/legal/impressum-master.json`,
+      { next: { revalidate: 3600 } }
+    );
+    if (!res.ok) return null;
+    const data = await res.json() as Record<string, unknown>;
+    const r = data.responsible as Record<string, string> | undefined;
+    if (!r) return null;
+    return {
+      responsible: r.name ?? '',
+      address: r.address ?? '',
+      email: r.email ?? '',
+    };
+  } catch {
+    return null;
+  }
 }
 
 export function resolveArchive(doc: DocumentRef): { system: string; label: string } | null {

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { legalInfo } from '@/lib/public-content';
+import { getLegalInfo } from '@/lib/kg';
 import { isLocale, type Locale, ui } from '@/lib/i18n';
 
 const legalKinds = ['imprint', 'privacy', 'terms'] as const;
@@ -19,14 +20,20 @@ export default async function LegalPage({ params }: { params: Promise<{ locale: 
   const t = ui[locale];
   const k = kind as LegalKind;
 
+  // KG-Daten bevorzugen, Fallback auf statische legalInfo
+  const kg = await getLegalInfo();
+  const responsible = kg?.responsible ?? legalInfo.responsible;
+  const address = kg?.address ?? legalInfo.address;
+  const email = kg?.email ?? legalInfo.email;
+
   return (
     <main className="shell">
       <header className="topbar">
         <Link className="brand" href={`/${locale}`}>Contracomology</Link>
         <nav className="nav">
-          <Link href={`/${locale}/legal/imprint`}>Impressum</Link>
-          <Link href={`/${locale}/legal/privacy`}>Datenschutz</Link>
-          <Link href={`/${locale}/legal/terms`}>Hinweise</Link>
+          <Link href={`/${locale}/legal/imprint`}>{locale === 'de' ? 'Impressum' : 'Imprint'}</Link>
+          <Link href={`/${locale}/legal/privacy`}>{locale === 'de' ? 'Datenschutz' : 'Privacy'}</Link>
+          <Link href={`/${locale}/legal/terms`}>{locale === 'de' ? 'Hinweise' : 'Notes'}</Link>
         </nav>
       </header>
 
@@ -37,32 +44,38 @@ export default async function LegalPage({ params }: { params: Promise<{ locale: 
           <p className="lede">{t.legalNote}</p>
         </div>
         <aside className="card">
-          <h3>{legalInfo.responsible}</h3>
-          <p>{legalInfo.address}</p>
-          <p><a href={`mailto:${legalInfo.email}`}>{legalInfo.email}</a></p>
+          <h3>{responsible}</h3>
+          <p>{address}</p>
+          <p><a href={`mailto:${email}`}>{email}</a></p>
         </aside>
       </section>
 
       <section className="card">
         {k === 'imprint' ? (
           <>
-            <h2>Anbieter</h2>
-            <p>{legalInfo.responsible}<br />{legalInfo.address}</p>
-            <h2>Kontakt</h2>
-            <p><a href={`mailto:${legalInfo.email}`}>{legalInfo.email}</a></p>
+            <h2>{locale === 'de' ? 'Anbieter' : 'Provider'}</h2>
+            <p>{responsible}<br />{address}</p>
+            <h2>{locale === 'de' ? 'Kontakt' : 'Contact'}</h2>
+            <p><a href={`mailto:${email}`}>{email}</a></p>
           </>
         ) : null}
         {k === 'privacy' ? (
           <>
-            <h2>Datenschutzhinweise</h2>
-            <p>Beim Besuch dieser Website werden keine Kontaktformulare bereitgestellt.</p>
-            <p>Technisch notwendige Zugriffsdaten koennen durch den Hosting-Anbieter verarbeitet werden.</p>
-            <p>Bei Kontakt per E-Mail werden die uebermittelten Angaben zur Bearbeitung verwendet.</p>
+            <h2>{locale === 'de' ? 'Datenschutzhinweise' : 'Privacy notes'}</h2>
+            <p>{locale === 'de'
+              ? 'Beim Besuch dieser Website werden keine Kontaktformulare bereitgestellt.'
+              : 'No contact forms are provided on this website.'}</p>
+            <p>{locale === 'de'
+              ? 'Technisch notwendige Zugriffsdaten können durch den Hosting-Anbieter verarbeitet werden.'
+              : 'Technically necessary access data may be processed by the hosting provider.'}</p>
+            <p>{locale === 'de'
+              ? 'Bei Kontakt per E-Mail werden die übermittelten Angaben zur Bearbeitung verwendet.'
+              : 'If you contact us by email, the submitted data will be used to process your request.'}</p>
           </>
         ) : null}
         {k === 'terms' ? (
           <>
-            <h2>Hinweise</h2>
+            <h2>{locale === 'de' ? 'Hinweise' : 'Notes'}</h2>
             <p>{locale === 'de' ? legalInfo.disclaimerDe : legalInfo.disclaimerEn}</p>
           </>
         ) : null}

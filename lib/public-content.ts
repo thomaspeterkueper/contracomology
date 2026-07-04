@@ -69,8 +69,9 @@ export const publicCourses: PublicCourse[] = [
 
 export const legalInfo = {
   responsible: 'Thomas Peter Küper',
-  address: 'Mörfelder Landstraße 103, 60598 Frankfurt am Main, Germany',
-  email: 'mail@thomas-kueper.de',
+  address: 'Mörfelder Landstraße 103, 60598 Frankfurt am Main, Deutschland',
+  email: 't.kueper@camaleo.de',
+  kgRef: 'LEGAL:L3:impressum-master',
   disclaimerDe:
     'Die Kontrakomologie ist ein analytisches Framework zur Beschreibung von Zeitstrukturen in Musik und Literatur. Sie ist ein vom Kurator gesetzter Wissenschaftszweig — Theorie, keine empirische Forschung, keine externe Begutachtung.',
   disclaimerEn:
