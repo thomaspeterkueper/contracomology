@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { legalInfo } from '@/lib/public-content';
-import { getLegalInfo } from '@/lib/kg';
 import { isLocale, type Locale, ui } from '@/lib/i18n';
 
 const legalKinds = ['imprint', 'privacy', 'terms'] as const;
@@ -10,21 +9,14 @@ type LegalKind = (typeof legalKinds)[number];
 function pageTitle(kind: LegalKind, locale: Locale): string {
   if (kind === 'imprint') return locale === 'de' ? 'Impressum' : 'Imprint';
   if (kind === 'privacy') return locale === 'de' ? 'Datenschutz' : 'Privacy';
-  return locale === 'de' ? 'Hinweise' : 'Notes';
+  return locale === 'de' ? 'Nutzungshinweise' : 'Terms';
 }
 
 export default async function LegalPage({ params }: { params: Promise<{ locale: string; kind: string }> }) {
   const { locale: rawLocale, kind } = await params;
   if (!isLocale(rawLocale) || !legalKinds.includes(kind as LegalKind)) notFound();
   const locale: Locale = rawLocale;
-  const t = ui[locale];
   const k = kind as LegalKind;
-
-  // KG-Daten bevorzugen, Fallback auf statische legalInfo
-  const kg = await getLegalInfo();
-  const responsible = kg?.responsible ?? legalInfo.responsible;
-  const address = kg?.address ?? legalInfo.address;
-  const email = kg?.email ?? legalInfo.email;
 
   return (
     <main className="shell">
@@ -33,53 +25,41 @@ export default async function LegalPage({ params }: { params: Promise<{ locale: 
         <nav className="nav">
           <Link href={`/${locale}/legal/imprint`}>{locale === 'de' ? 'Impressum' : 'Imprint'}</Link>
           <Link href={`/${locale}/legal/privacy`}>{locale === 'de' ? 'Datenschutz' : 'Privacy'}</Link>
-          <Link href={`/${locale}/legal/terms`}>{locale === 'de' ? 'Hinweise' : 'Notes'}</Link>
+          <Link href={`/${locale}/legal/terms`}>{locale === 'de' ? 'Nutzungshinweise' : 'Terms'}</Link>
         </nav>
       </header>
 
-      <section className="hero">
-        <div>
-          <p className="eyebrow">{t.legal}</p>
-          <h1>{pageTitle(k, locale)}</h1>
-          <p className="lede">{t.legalNote}</p>
-        </div>
-        <aside className="card">
-          <h3>{responsible}</h3>
-          <p>{address}</p>
-          <p><a href={`mailto:${email}`}>{email}</a></p>
-        </aside>
-      </section>
+      <div style={{ maxWidth: '680px', margin: '0 auto', padding: '3rem 2rem 6rem' }}>
+        <h1 style={{ marginBottom: '2rem' }}>{pageTitle(k, locale)}</h1>
 
-      <section className="card">
-        {k === 'imprint' ? (
-          <>
-            <h2>{locale === 'de' ? 'Anbieter' : 'Provider'}</h2>
-            <p>{responsible}<br />{address}</p>
+        {k === 'imprint' && (
+          <div>
+            <h2>{locale === 'de' ? 'Angaben gemäß § 5 TMG' : 'Legal notice pursuant to § 5 TMG'}</h2>
+            <p style={{ whiteSpace: 'pre-line' }}>{legalInfo.responsible}{`\n`}{legalInfo.address}</p>
             <h2>{locale === 'de' ? 'Kontakt' : 'Contact'}</h2>
-            <p><a href={`mailto:${email}`}>{email}</a></p>
-          </>
-        ) : null}
-        {k === 'privacy' ? (
-          <>
-            <h2>{locale === 'de' ? 'Datenschutzhinweise' : 'Privacy notes'}</h2>
+            <p>E-Mail: <a href={`mailto:${legalInfo.email}`}>{legalInfo.email}</a></p>
+            <h2>{locale === 'de' ? 'Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV' : 'Responsible for content'}</h2>
+            <p>{legalInfo.responsible}, {legalInfo.address.split('\n').slice(0, 2).join(', ')}</p>
+            <h2>{locale === 'de' ? 'Urheberrecht' : 'Copyright'}</h2>
             <p>{locale === 'de'
-              ? 'Beim Besuch dieser Website werden keine Kontaktformulare bereitgestellt.'
-              : 'No contact forms are provided on this website.'}</p>
-            <p>{locale === 'de'
-              ? 'Technisch notwendige Zugriffsdaten können durch den Hosting-Anbieter verarbeitet werden.'
-              : 'Technically necessary access data may be processed by the hosting provider.'}</p>
-            <p>{locale === 'de'
-              ? 'Bei Kontakt per E-Mail werden die übermittelten Angaben zur Bearbeitung verwendet.'
-              : 'If you contact us by email, the submitted data will be used to process your request.'}</p>
-          </>
-        ) : null}
-        {k === 'terms' ? (
-          <>
-            <h2>{locale === 'de' ? 'Hinweise' : 'Notes'}</h2>
-            <p>{locale === 'de' ? legalInfo.disclaimerDe : legalInfo.disclaimerEn}</p>
-          </>
-        ) : null}
-      </section>
+              ? 'Alle Inhalte dieser Website sind urheberrechtlich geschützt und Eigentum von Thomas Peter Küper. Vervielfältigung bedarf der schriftlichen Zustimmung.'
+              : 'All content on this website is protected by copyright and property of Thomas Peter Küper. Reproduction requires written consent.'
+            }</p>
+          </div>
+        )}
+
+        {k === 'privacy' && (
+          <div style={{ whiteSpace: 'pre-wrap', lineHeight: '1.8', color: '#555' }}>
+            {locale === 'de' ? legalInfo.privacy.de : legalInfo.privacy.en}
+          </div>
+        )}
+
+        {k === 'terms' && (
+          <div style={{ whiteSpace: 'pre-wrap', lineHeight: '1.8', color: '#555' }}>
+            {locale === 'de' ? legalInfo.terms.de : legalInfo.terms.en}
+          </div>
+        )}
+      </div>
     </main>
   );
 }
