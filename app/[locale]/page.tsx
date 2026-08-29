@@ -77,7 +77,7 @@ export default async function LocaleHome({ params }: { params: Promise<{ locale:
       </section>
 
       <footer>
-        <Link href={`/${locale}/legal/imprint`}>Impressum</Link> · <Link href={`/${locale}/legal/privacy`}>Datenschutz</Link>
+        <Link href={`/${locale}/legal/imprint`}>Impressum</Link> · <Link href={`/${locale}/legal/privacy`}>Datenschutz</Link> · <Link href={`/${locale}/legal/ai-transparency`}>KI-Transparenz</Link>
       </footer>
     </main>
   );
