@@ -139,6 +139,11 @@ function resolveTemplate(text: string, info: LegalInfo): string {
     .replaceAll('{{ impressum.updated }}', info.updated);
 }
 
+function normalizeSourceRepository(value: unknown): string {
+  const candidate = String(value ?? '');
+  return /^[^/]+\/[^/]+$/.test(candidate) ? candidate : KG_REPO;
+}
+
 export async function getLegalDocument(kind: Exclude<LegalKind, 'imprint'>): Promise<{ body: string; status: string } | null> {
   const [registry, info] = await Promise.all([
     kg<DocumentRegistry>('document-references-0.1.json'),
@@ -150,7 +155,7 @@ export async function getLegalDocument(kind: Exclude<LegalKind, 'imprint'>): Pro
   const record = (registry.records ?? []).find((entry) => entry.id === id);
   if (!record) return null;
 
-  const sourceRepository = String(record.sourceRepository ?? KG_REPO);
+  const sourceRepository = normalizeSourceRepository(record.sourceRepository);
   const sourcePath = String(record.sourcePath ?? '');
   if (!sourcePath) return null;
 
