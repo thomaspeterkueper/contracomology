@@ -119,10 +119,12 @@ type LegalMaster = {
 
 type DocumentRegistry = { records?: Json[] };
 
-export async function getLegalInfo(): Promise<LegalInfo | null> {
+export async function getLegalInfo(): Promise<LegalInfo> {
   const data = await fetchJson<LegalMaster>(`${KG_REGISTRY}/legal/impressum-master.json`);
   const r = data?.responsible;
-  if (!r?.name || !r.address || !r.email) return null;
+  if (!r?.name || !r.address || !r.email) {
+    throw new Error('Required KG legal source LEGAL:L3:impressum-master is unavailable or incomplete');
+  }
   return {
     responsible: r.name,
     address: r.address,
@@ -144,27 +146,33 @@ function normalizeSourceRepository(value: unknown): string {
   return /^[^/]+\/[^/]+$/.test(candidate) ? candidate : KG_REPO;
 }
 
-export async function getLegalDocument(kind: Exclude<LegalKind, 'imprint'>): Promise<{ body: string; status: string } | null> {
+function documentStatus(body: string, fallback: string): string {
+  const match = body.match(/\*\*Status:\*\*\s*`([^`]+)`/i);
+  return match?.[1] ?? fallback;
+}
+
+export async function getLegalDocument(kind: Exclude<LegalKind, 'imprint'>): Promise<{ body: string; status: string }> {
   const [registry, info] = await Promise.all([
     kg<DocumentRegistry>('document-references-0.1.json'),
     getLegalInfo(),
   ]);
-  if (!registry || !info) return null;
+  if (!registry) throw new Error('Required KG document-references registry is unavailable');
 
   const id = LEGAL_DOCUMENT_REFS[kind];
   const record = (registry.records ?? []).find((entry) => entry.id === id);
-  if (!record) return null;
+  if (!record) throw new Error(`Required KG legal DocumentReference ${id} is missing`);
 
   const sourceRepository = normalizeSourceRepository(record.sourceRepository);
   const sourcePath = String(record.sourcePath ?? '');
-  if (!sourcePath) return null;
+  if (!sourcePath) throw new Error(`Required KG legal DocumentReference ${id} has no sourcePath`);
 
-  const body = await fetchText(`https://raw.githubusercontent.com/${sourceRepository}/main/${sourcePath}`);
-  if (!body) return null;
+  const rawBody = await fetchText(`https://raw.githubusercontent.com/${sourceRepository}/main/${sourcePath}`);
+  if (!rawBody) throw new Error(`Required KG legal source ${sourceRepository}/${sourcePath} is unavailable`);
 
+  const body = resolveTemplate(rawBody, info);
   return {
-    body: resolveTemplate(body, info),
-    status: String(record.status ?? 'unknown'),
+    body,
+    status: documentStatus(rawBody, String(record.status ?? 'unknown')),
   };
 }
 
