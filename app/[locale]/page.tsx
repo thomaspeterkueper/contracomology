@@ -1,13 +1,19 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { publicCourses } from '@/lib/public-content';
+import { getContracomologyConcepts, getContracomologyDomains } from '@/lib/kg';
 import { isLocale, localeLabel, locales, type Locale, ui } from '@/lib/i18n';
+
+export const revalidate = 3600;
 
 export default async function LocaleHome({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: rawLocale } = await params;
   if (!isLocale(rawLocale)) notFound();
   const locale: Locale = rawLocale;
   const t = ui[locale];
+  const [domains, concepts] = await Promise.all([
+    getContracomologyDomains(),
+    getContracomologyConcepts(),
+  ]);
 
   return (
     <main className="shell">
@@ -43,35 +49,25 @@ export default async function LocaleHome({ params }: { params: Promise<{ locale:
       </section>
 
       <section>
-        <h2>{t.academy}</h2>
-        <div className="grid">
-          {publicCourses.map((course) => (
-            <article className="card" key={course.slug}>
-              <h3>{course.title[locale]}</h3>
-              <p>{course.subtitle[locale]}</p>
-              <Link className="cta" href={`/${locale}/course#${course.slug}`}>{t.open}</Link>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section>
-        <h2>{locale === 'de' ? 'Drei Paradigmata' : locale === 'en' ? 'Three Paradigms' : '세 가지 패러다임'}</h2>
+        <h2>{locale === 'de' ? 'Knowledge Graph' : locale === 'en' ? 'Knowledge Graph' : 'Knowledge Graph'}</h2>
         <div className="grid">
           <article className="card">
-            <p className="meta">{locale === 'de' ? 'Objektiv-strukturell' : locale === 'en' ? 'Objective-structural' : '객관적-구조적'}</p>
-            <h3>Bach</h3>
-            <p>{locale === 'de' ? 'Mehrere vollständige Stimmen, gleichzeitig, gleichwertig. Zeitarchitektur ohne subjektives Zentrum.' : locale === 'en' ? 'Multiple complete voices, simultaneous, equal. Time architecture without a subjective centre.' : '동시에 존재하는 여러 완전한 목소리들. 주관적 중심 없는 시간 구조.'}</p>
+            <p className="meta">{locale === 'de' ? 'Domänen' : locale === 'en' ? 'Domains' : '도메인'}</p>
+            <h3>{domains.length}</h3>
+            <p>{locale === 'de' ? 'Im KG für Kontrakomologie verfügbare Wissensdomänen.' : locale === 'en' ? 'Knowledge domains currently available for Contracomology in the KG.' : 'KG에서 Contracomology에 사용할 수 있는 지식 도메인입니다.'}</p>
+            <Link className="cta" href={`/${locale}/kg`}>{t.open}</Link>
           </article>
           <article className="card">
-            <p className="meta">{locale === 'de' ? 'Psychologisch-persönlich' : locale === 'en' ? 'Psychological-personal' : '심리적-개인적'}</p>
-            <h3>Chopin</h3>
-            <p>{locale === 'de' ? 'Asymmetrische innere Vielstimmigkeit. Eine Stimme trägt die Hauptlast. Zeitarchitektur einer einzelnen Seele.' : locale === 'en' ? 'Asymmetric inner polyphony. One voice carries the main weight. The time architecture of a single soul.' : '비대칭적 내적 다성성. 하나의 목소리가 주된 무게를 담당한다.'}</p>
+            <p className="meta">{t.concepts}</p>
+            <h3>{concepts.length}</h3>
+            <p>{locale === 'de' ? 'Freigegebene Begriffe werden direkt aus dem Knowledge Graph angezeigt.' : locale === 'en' ? 'Released concepts are displayed directly from the Knowledge Graph.' : '공개된 개념은 Knowledge Graph에서 직접 표시됩니다.'}</p>
+            <Link className="cta" href={`/${locale}/kg`}>{t.open}</Link>
           </article>
           <article className="card">
-            <p className="meta">{locale === 'de' ? 'Kosmisch-mythologisch' : locale === 'en' ? 'Cosmic-mythological' : '우주적-신화적'}</p>
-            <h3>Wagner</h3>
-            <p>{locale === 'de' ? 'Zyklen von Aufbau und Kollaps über bis zu 15 Stunden. Leitmotive als vollständige Transformationsprozesse.' : locale === 'en' ? 'Cycles of construction and collapse over up to 15 hours. Leitmotifs as complete transformation processes.' : '최대 15시간에 걸친 구성과 붕괴의 순환. 완전한 변환 과정으로서의 라이트모티프.'}</p>
+            <p className="meta">{t.documents}</p>
+            <h3>SSOT</h3>
+            <p>{locale === 'de' ? 'Fachtexte bleiben in ihren kanonischen Archiven; dieses Portal ist nur die Fassade.' : locale === 'en' ? 'Subject texts remain in their canonical archives; this portal is only the facade.' : '전문 텍스트는 정식 아카이브에 남고 이 포털은 표시 계층만 담당합니다.'}</p>
+            <Link className="cta" href={`/${locale}/documents`}>{t.openDocuments}</Link>
           </article>
         </div>
       </section>
