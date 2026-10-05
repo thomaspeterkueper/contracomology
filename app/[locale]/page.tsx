@@ -116,6 +116,8 @@ export default async function LocaleHome({ params }: { params: Promise<{ locale:
         </div>
       </section>
 
+      <section className="author-section"><div className="container narrow"><p className="section-label">{locale === 'de' ? 'Autor' : locale === 'en' ? 'Author' : '저자'}</p><h2>Thomas Peter Küper</h2><p className="section-lede">{locale === 'de' ? 'Kontrakomologie ist Teil einer größeren Arbeit an Musik, Literatur, Wissenschaft und Ideen. Weitere Projekte und Texte finden sich auf der persönlichen Website.' : locale === 'en' ? 'Contracomology is part of a broader body of work across music, literature, science and ideas. Further projects and texts are available on the personal website.' : 'Contracomology는 음악, 문학, 과학과 아이디어를 아우르는 더 큰 작업의 일부입니다. 다른 프로젝트와 글은 개인 웹사이트에서 볼 수 있습니다.'}</p><a className="text-link" href="https://www.thomas-kueper.de/" rel="external">{locale === 'de' ? 'Zur Homepage' : locale === 'en' ? 'Personal website' : '개인 홈페이지'} →</a></div></section>
+
       <footer className="site-footer"><div className="container"><div className="footer-title">Kontrakomologie</div><div className="footer-links"><Link href={`/${locale}/legal/imprint`}>Impressum</Link><Link href={`/${locale}/legal/privacy`}>Datenschutz</Link><Link href={`/${locale}/legal/ai-transparency`}>KI-Transparenz</Link></div><p>© 2026 Thomas Peter Küper</p></div></footer>
     </main>
   );
