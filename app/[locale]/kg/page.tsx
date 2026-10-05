@@ -32,18 +32,18 @@ export default async function KgPage({ params }: { params: Promise<{ locale: str
         <div>
           <p className="eyebrow">{t.kgExplorer}</p>
           <h1>{t.kgExplorer}</h1>
-          <p className="lede">{t.kgLede}</p>
+          <p className="lede">{locale === 'de' ? 'Zentrale Begriffe, Zeitformen und Denkfiguren der Kontrakomologie.' : locale === 'en' ? 'Core concepts, forms of time and patterns of thought in Contracomology.' : 'Contracomology의 핵심 개념, 시간 형식과 사고 구조.'}</p>
         </div>
       </section>
 
       <section>
-        <h2>Domains</h2>
+        <h2>{locale === 'de' ? 'Themenfelder' : locale === 'en' ? 'Fields' : '주제 영역'}</h2>
         <div className="list">
           {domains.length ? domains.map((d) => (
             <article className="item" key={d.id}>
               <h3>{d.title || d.id}</h3>
               <p>{d.description ?? t.emptyDomain}</p>
-              <p className="meta">{d.id} · {d.code} · {d.level}</p>
+              
             </article>
           )) : <p className="empty">{t.emptyDomain}</p>}
         </div>
@@ -55,7 +55,7 @@ export default async function KgPage({ params }: { params: Promise<{ locale: str
           {concepts.length ? concepts.map((c) => (
             <article className="item" key={c.id}>
               <h3>{c.name || c.id}</h3>
-              <p className="meta">{c.id}{c.domain ? ` · ${c.domain}` : ''}</p>
+              
             </article>
           )) : <p className="empty">{t.emptyDomain}</p>}
         </div>

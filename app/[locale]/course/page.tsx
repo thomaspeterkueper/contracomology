@@ -31,17 +31,11 @@ export default async function CoursePage({ params }: { params: Promise<{ locale:
 
       <section className="hero">
         <div>
-          <p className="eyebrow">{t.course}</p>
-          <h1>{t.academy}</h1>
+          <p className="eyebrow">{locale === 'de' ? 'Methode' : locale === 'en' ? 'Method' : '방법'}</p>
+          <h1>{locale === 'de' ? 'Kontrakomologie anwenden' : locale === 'en' ? 'Applying Contracomology' : 'Contracomology 적용하기'}</h1>
           <p className="lede">{t.subtitle}</p>
         </div>
-        <aside className="card">
-          <p>{locale === 'de'
-            ? 'Die Kursoberfläche folgt ausschließlich den im Knowledge Graph freigegebenen Domänen und Begriffen.'
-            : locale === 'en'
-              ? 'The course surface follows only domains and concepts released in the Knowledge Graph.'
-              : '과정 화면은 Knowledge Graph에 공개된 도메인과 개념만 따릅니다.'}</p>
-        </aside>
+        
       </section>
 
       <section>
@@ -49,7 +43,6 @@ export default async function CoursePage({ params }: { params: Promise<{ locale:
         <div className="list">
           {domains.length ? domains.map((domain) => (
             <article className="item" key={domain.id}>
-              <p className="meta">{domain.id} · {domain.level}</p>
               <h2>{domain.title || domain.id}</h2>
               {domain.description ? <p>{domain.description}</p> : null}
             </article>
@@ -62,7 +55,6 @@ export default async function CoursePage({ params }: { params: Promise<{ locale:
         <div className="list">
           {concepts.length ? concepts.map((concept) => (
             <article className="item" key={concept.id}>
-              <p className="meta">{concept.id}{concept.layer ? ` · ${concept.layer}` : ''}</p>
               <h2>{concept.name || concept.id}</h2>
             </article>
           )) : <p className="empty">{t.emptyDomain}</p>}
