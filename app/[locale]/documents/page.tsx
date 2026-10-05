@@ -33,7 +33,7 @@ export default async function DocumentsPage({ params }: { params: Promise<{ loca
   return <main className="shell">
     <header className="topbar">
       <Link className="brand" href={`/${locale}`}>Contracomology</Link>
-      <nav className="nav"><Link href={`/${locale}/course`}>{t.course}</Link><Link href={`/${locale}/kg`}>{t.kg}</Link><span className="langs">{locales.map(l => <Link className={`pill ${l === locale ? 'active' : ''}`} key={l} href={`/${l}/documents`}>{localeLabel(l)}</Link>)}</span></nav>
+      <nav className="nav"><Link href={`/${locale}/course`}>{t.course}</Link><Link href={`/${locale}/kg`}>{t.concepts}</Link><span className="langs">{locales.map(l => <Link className={`pill ${l === locale ? 'active' : ''}`} key={l} href={`/${l}/documents`}>{localeLabel(l)}</Link>)}</span></nav>
     </header>
     <section className="hero"><p className="eyebrow">{german ? 'Texte & Werke' : 'Texts & works'}</p><h1>{german ? 'Publikationen' : 'Publications'}</h1><p className="lede">{german ? 'Grundlagen, Analysen und eigene Arbeiten der Kontrakomologie.' : 'Foundations, analyses and original work in Contracomology.'}</p></section>
     {german ? <>
