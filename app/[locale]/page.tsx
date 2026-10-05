@@ -87,7 +87,7 @@ export default async function LocaleHome({ params }: { params: Promise<{ locale:
           <p className="eyebrow">{c.kicker}</p>
           <h1>Kontrakomologie</h1>
           <p className="hero-statement">{c.lead}</p>
-          <p className="lede">{c.intro}</p>
+          <p className="lede">{c.intro}</p>{locale === 'de' ? <p className="lede secondary-lede">Der Name kommt vom Kontrapunkt: Mehrere Stimmen verlaufen gleichzeitig, jede nach ihrer eigenen Logik. Kontrakomologie überträgt diese Beobachtung auf das Hören und Lesen: Wie viele Wahrheiten sind in einem Moment gleichzeitig wahr – und wie stehen sie zueinander?</p> : null}
           <div className="actions"><Link className="text-link" href={`/${locale}/course`}>{c.explore} →</Link><Link className="text-link" href={`/${locale}/documents`}>{c.read} →</Link></div>
         </div>
       </section>
@@ -109,6 +109,8 @@ export default async function LocaleHome({ params }: { params: Promise<{ locale:
         </div>
       </section>
 
+      <section className="essay-section" id="timeforms"><div className="container narrow"><p className="section-label">{locale === 'de' ? 'Zeitformen' : locale === 'en' ? 'Forms of time' : '시간 형식'}</p><h2>{locale === 'de' ? 'Nicht verschiedene Tempi – verschiedene Arten, wie Zeit funktioniert.' : locale === 'en' ? 'Not different tempi – different ways time can work.' : '서로 다른 템포가 아니라, 시간이 작동하는 서로 다른 방식.'}</h2>{locale === 'de' ? <><p className="section-lede">Bach erzeugt strukturelle Gleichzeitigkeit. Davis erzeugt Offenzeit. Evans erzeugt Resonanzzeit. Lucier erzeugt Transformationszeit. Diese Formen sind keine Schubladen für Werke, sondern Beschreibungen dessen, was beim genauen Hören geschieht.</p><p className="section-lede">Ein Werk kann zudem beide Zeitrichtungen zugleich tragen: Das Ende verändert rückwirkend den Anfang, obwohl keine Note und kein Wort sich geändert hat.</p></> : null}</div></section>
+
       <section className="essay-section dark-section" id="masters">
         <div className="container">
           <p className="section-label">{c.examplesTitle}</p>
@@ -116,9 +118,11 @@ export default async function LocaleHome({ params }: { params: Promise<{ locale:
         </div>
       </section>
 
+      <section className="essay-section"><div className="container narrow"><p className="section-label">{locale === 'de' ? 'Abgrenzung' : locale === 'en' ? 'Scope' : '범위'}</p><h2>{locale === 'de' ? 'Was Kontrakomologie nicht ist' : locale === 'en' ? 'What Contracomology is not' : 'Contracomology가 아닌 것'}</h2>{locale === 'de' ? <p className="section-lede">Sie behauptet nicht, dass Komponisten Physikmodelle vertont haben. Sie ist auch kein Werkzeug, das ein Werk erklärt und damit erledigt. Ausgangspunkt ist immer das Werk selbst: Die Theorie folgt dem Hören und Lesen.</p> : null}</div></section>
+
       <section className="author-section"><div className="container narrow"><p className="section-label">{locale === 'de' ? 'Autor' : locale === 'en' ? 'Author' : '저자'}</p><h2>Thomas Peter Küper</h2><p className="section-lede">{locale === 'de' ? 'Kontrakomologie ist Teil einer größeren Arbeit an Musik, Literatur, Wissenschaft und Ideen. Weitere Projekte und Texte finden sich auf der persönlichen Website.' : locale === 'en' ? 'Contracomology is part of a broader body of work across music, literature, science and ideas. Further projects and texts are available on the personal website.' : 'Contracomology는 음악, 문학, 과학과 아이디어를 아우르는 더 큰 작업의 일부입니다. 다른 프로젝트와 글은 개인 웹사이트에서 볼 수 있습니다.'}</p><a className="text-link" href="https://www.thomas-kueper.de/" rel="external">{locale === 'de' ? 'Zur Homepage' : locale === 'en' ? 'Personal website' : '개인 홈페이지'} →</a></div></section>
 
-      <footer className="site-footer"><div className="container"><div className="footer-title">Kontrakomologie</div><div className="footer-links"><Link href={`/${locale}/legal/imprint`}>Impressum</Link><Link href={`/${locale}/legal/privacy`}>Datenschutz</Link><Link href={`/${locale}/legal/ai-transparency`}>KI-Transparenz</Link></div><p>© 2026 Thomas Peter Küper</p></div></footer>
+      <footer className="site-footer"><div className="container"><div className="footer-title">Kontrakomologie</div><div className="footer-links"><Link href={`/${locale}/legal/imprint`}>{locale === 'de' ? 'Impressum' : 'Imprint'}</Link><Link href={`/${locale}/legal/privacy`}>{locale === 'de' ? 'Datenschutz' : 'Privacy'}</Link><Link href={`/${locale}/legal/terms`}>{locale === 'de' ? 'Nutzungsbedingungen' : 'Terms'}</Link><Link href={`/${locale}/legal/ai-transparency`}>{locale === 'de' ? 'KI-Transparenz' : 'AI transparency'}</Link></div><p>© 2026 Thomas Peter Küper</p></div></footer>
     </main>
   );
 }
