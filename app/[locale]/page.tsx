@@ -71,15 +71,18 @@ export default async function LocaleHome({ params }: { params: Promise<{ locale:
         <div className="container nav-inner">
           <Link className="brand" href={`/${locale}`}>Kontrakomologie</Link>
           <nav className="nav">
-            <Link href={`/${locale}/course`}>{c.explore}</Link>
-            <Link href={`/${locale}/documents`}>{c.read}</Link>
-            <Link href={`/${locale}/legal/imprint`}>{t.legal}</Link>
+            <a href="#about">{locale === 'de' ? 'Überblick' : locale === 'en' ? 'About' : '소개'}</a>
+            <a href="#principles">{locale === 'de' ? 'Prinzipien' : locale === 'en' ? 'Principles' : '원리'}</a>
+            <a href="#masters">{locale === 'de' ? 'Meister' : locale === 'en' ? 'Masters' : '거장'}</a>
+            <Link href={`/${locale}/course`}>{locale === 'de' ? 'Anwendungen' : locale === 'en' ? 'Applications' : '응용'}</Link>
+            <Link href={`/${locale}/kg`}>{locale === 'de' ? 'Forschung' : locale === 'en' ? 'Research' : '연구'}</Link>
+            <Link href={`/${locale}/documents`}>{locale === 'de' ? 'Publikationen' : locale === 'en' ? 'Publications' : '출판'}</Link>
             <span className="langs">{locales.map((l) => <Link key={l} className={`lang ${l === locale ? 'active' : ''}`} href={`/${l}`}>{localeLabel(l)}</Link>)}</span>
           </nav>
         </div>
       </header>
 
-      <section className="publication-hero">
+      <section className="publication-hero" id="about">
         <div className="container narrow">
           <p className="eyebrow">{c.kicker}</p>
           <h1>Kontrakomologie</h1>
@@ -89,7 +92,7 @@ export default async function LocaleHome({ params }: { params: Promise<{ locale:
         </div>
       </section>
 
-      <section className="essay-section soft">
+      <section className="essay-section soft" id="principles">
         <div className="container narrow">
           <p className="section-label">{locale === 'de' ? 'Methode' : locale === 'en' ? 'Method' : '방법'}</p>
           <h2>{c.methodTitle}</h2><p className="section-lede">{c.method}</p>
@@ -106,7 +109,7 @@ export default async function LocaleHome({ params }: { params: Promise<{ locale:
         </div>
       </section>
 
-      <section className="essay-section dark-section">
+      <section className="essay-section dark-section" id="masters">
         <div className="container">
           <p className="section-label">{c.examplesTitle}</p>
           <div className="example-grid">{c.examples.map(([title, body]) => <article key={title}><h3>{title}</h3><p>{body}</p></article>)}</div>
