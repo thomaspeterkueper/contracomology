@@ -55,7 +55,8 @@ export default async function KgPage({ params }: { params: Promise<{ locale: str
           {concepts.length ? concepts.map((c) => (
             <article className="item" key={c.id}>
               <h3>{c.name || c.id}</h3>
-              <p className="meta">{c.id}{c.domain ? ` · ${c.domain}` : ''}</p>
+              {c.definition ? <p>{c.definition}</p> : c.definitionStatus === 'pending_definition' ? <p>{t.emptyDomain}</p> : null}
+              <p className="meta">{c.id}{c.domain ? ` · ${c.domain}` : ''}{c.epistemicStatus ? ` · [${c.epistemicStatus}]` : ''}{c.status ? ` · ${c.status}` : ''}</p>
             </article>
           )) : <p className="empty">{t.emptyDomain}</p>}
         </div>
