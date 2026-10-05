@@ -52,7 +52,7 @@ export type KnowledgeDomain = {
   parent?: string | null;
 };
 
-export type Concept = { id: string; name: string; domain?: string; layer?: string };
+export type Concept = { id: string; name: string; domain?: string; layer?: string; definition?: string; status?: string; epistemicStatus?: string; definitionStatus?: string };
 export type DocumentRef = {
   id: string;
   title?: string;
@@ -77,7 +77,7 @@ export async function getContracomologyDomains(): Promise<KnowledgeDomain[]> {
 }
 
 export async function getContracomologyConcepts(): Promise<Concept[]> {
-  const data = await kg('kxf-0.6.json');
+  const data = await kg('contracomology-0.1.json');
   return records(data, 'entities')
     .filter((e) => e.type === 'Concept' && (e.domain === CONTRACOMOLOGY_DOMAIN || e.domaene === CONTRACOMOLOGY_DOMAIN))
     .map((e) => ({
@@ -85,6 +85,10 @@ export async function getContracomologyConcepts(): Promise<Concept[]> {
       name: String(e.name ?? ''),
       domain: e.domain || e.domaene ? String(e.domain ?? e.domaene) : undefined,
       layer: e.layer ? String(e.layer) : undefined,
+      definition: e.definition ? String(e.definition) : undefined,
+      status: e.status ? String(e.status) : undefined,
+      epistemicStatus: e.epistemicStatus ? String(e.epistemicStatus) : undefined,
+      definitionStatus: e.definitionStatus ? String(e.definitionStatus) : undefined,
     }));
 }
 
