@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getContracomologyDocuments, resolveArchive } from '@/lib/kg';
+import { getContracomologyDocuments } from '@/lib/kg';
 import { isLocale, localeLabel, locales, type Locale, ui } from '@/lib/i18n';
 
 export const revalidate = 3600;
@@ -29,22 +29,16 @@ export default async function DocumentsPage({ params }: { params: Promise<{ loca
         <div>
           <p className="eyebrow">{t.documents}</p>
           <h1>{t.documents}</h1>
-          <p className="lede">{t.docsLede}</p>
+          <p className="lede">{locale === 'de' ? 'Analysen, Essays und Texte zur Kontrakomologie.' : locale === 'en' ? 'Analyses, essays and texts on Contracomology.' : 'Contracomology에 관한 분석, 에세이와 글.'}</p>
         </div>
       </section>
 
       <div className="list">
-        {documents.length ? documents.map((d) => {
-          const archive = resolveArchive(d);
-          return (
-            <article className="item" key={d.id}>
-              <h2>{d.title ?? d.id}</h2>
-              <p className="meta">{d.id}</p>
-              <p>{archive ? archive.label : t.source}</p>
-              {d.repo || d.path ? <p className="meta">{d.repo ?? ''}{d.path ? ` · ${d.path}` : ''}</p> : null}
-            </article>
-          );
-        }) : <p className="empty">{t.emptyDomain}</p>}
+        {documents.length ? documents.map((d) => (
+          <article className="item" key={d.id}>
+            <h2>{d.title ?? (locale === 'de' ? 'Text' : locale === 'en' ? 'Text' : '글')}</h2>
+          </article>
+        )) : <p className="empty">{t.emptyDomain}</p>}
       </div>
     </main>
   );
