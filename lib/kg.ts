@@ -1,6 +1,9 @@
 const KG_REPO = 'thomaspeterkueper/kueper-knowledge-graph';
+// KG exports are read through the KG export API. The KG service holds the credentials for
+// the private KG repository server-side and only serves allowlisted export files, so no
+// repository credentials belong in this consumer.
+const KG_API_BASE = process.env.KG_API_BASE_URL ?? 'https://kueper-knowledge-graph.vercel.app';
 const KG_RAW_ROOT = `https://raw.githubusercontent.com/${KG_REPO}/main`;
-const KG_RAW = `${KG_RAW_ROOT}/exports`;
 const KG_REGISTRY = `${KG_RAW_ROOT}/registry`;
 
 export const CONTRACOMOLOGY_DOMAIN = 'KON';
@@ -34,7 +37,7 @@ async function fetchText(url: string): Promise<string | null> {
 }
 
 async function kg<T = Json>(file: string): Promise<T | null> {
-  return fetchJson<T>(`${KG_RAW}/${file}`);
+  return fetchJson<T>(`${KG_API_BASE}/api/exports/${file}`);
 }
 
 function records(obj: Json | null, key: string): Json[] {
@@ -77,7 +80,12 @@ export async function getContracomologyDomains(): Promise<KnowledgeDomain[]> {
 }
 
 export async function getContracomologyConcepts(): Promise<Concept[]> {
-  const data = await kg('contracomology-0.1.json');
+  // Held: contracomology-0.1.json is the declared canonical concept export, but the KG
+  // export API does not allowlist it yet (thomaspeterkueper/kueper-knowledge-graph#196).
+  // Until that lands, read the allowlisted KXF export, which already carries the KON
+  // concepts with status, epistemicStatus and definitionStatus metadata. Switch this
+  // filename back once contracomology-0.1.json is served by the KG API.
+  const data = await kg('kxf-0.6.json');
   return records(data, 'entities')
     .filter((e) => e.type === 'Concept' && (e.domain === CONTRACOMOLOGY_DOMAIN || e.domaene === CONTRACOMOLOGY_DOMAIN))
     .map((e) => ({
