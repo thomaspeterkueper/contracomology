@@ -1,65 +1,11 @@
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { getContracomologyConcepts, getContracomologyDomains } from '@/lib/kg';
-import { isLocale, localeLabel, locales, type Locale, ui } from '@/lib/i18n';
-
-export const revalidate = 3600;
-
-export default async function CoursePage({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale: rawLocale } = await params;
-  if (!isLocale(rawLocale)) notFound();
-  const locale: Locale = rawLocale;
-  const t = ui[locale];
-  const [domains, concepts] = await Promise.all([
-    getContracomologyDomains(),
-    getContracomologyConcepts(),
-  ]);
-
-  return (
-    <main className="shell">
-      <header className="topbar">
-        <Link className="brand" href={`/${locale}`}>Contracomology</Link>
-        <nav className="nav">
-          <Link href={`/${locale}`}>{t.title}</Link>
-          <Link href={`/${locale}/kg`}>{t.concepts}</Link>
-          <Link href={`/${locale}/documents`}>{t.documents}</Link>
-          <span className="langs">
-            {locales.map((l) => <Link key={l} className={`pill ${l === locale ? 'active' : ''}`} href={`/${l}/course`}>{localeLabel(l)}</Link>)}
-          </span>
-        </nav>
-      </header>
-
-      <section className="hero">
-        <div>
-          <p className="eyebrow">{locale === 'de' ? 'Methode' : locale === 'en' ? 'Method' : '방법'}</p>
-          <h1>{locale === 'de' ? 'Kontrakomologie anwenden' : locale === 'en' ? 'Applying Contracomology' : 'Contracomology 적용하기'}</h1>
-          <p className="lede">{t.subtitle}</p>
-        </div>
-        
-      </section>
-
-      <section>
-        <h2>{locale === 'de' ? 'Domänen' : locale === 'en' ? 'Domains' : '도메인'}</h2>
-        <div className="list">
-          {domains.length ? domains.map((domain) => (
-            <article className="item" key={domain.id}>
-              <h2>{domain.title || domain.id}</h2>
-              {domain.description ? <p>{domain.description}</p> : null}
-            </article>
-          )) : <p className="empty">{t.emptyDomain}</p>}
-        </div>
-      </section>
-
-      <section>
-        <h2>{t.concepts}</h2>
-        <div className="list">
-          {concepts.length ? concepts.map((concept) => (
-            <article className="item" key={concept.id}>
-              <h2>{concept.name || concept.id}</h2>
-            </article>
-          )) : <p className="empty">{t.emptyDomain}</p>}
-        </div>
-      </section>
-    <footer className="subpage-footer"><div className="footer-links"><Link href={`/${locale}/legal/imprint`}>{locale === 'de' ? 'Impressum' : 'Imprint'}</Link><Link href={`/${locale}/legal/privacy`}>{locale === 'de' ? 'Datenschutz' : 'Privacy'}</Link><Link href={`/${locale}/legal/terms`}>{locale === 'de' ? 'Nutzungsbedingungen' : 'Terms'}</Link><Link href={`/${locale}/legal/ai-transparency`}>{locale === 'de' ? 'KI-Transparenz' : 'AI transparency'}</Link><a href="https://www.thomas-kueper.de/" rel="external">Thomas Peter Küper</a></div><p>© 2026 Thomas Peter Küper</p></footer></main>
-  );
-}
+import Link from 'next/link'; import { notFound } from 'next/navigation'; import { isLocale, localeLabel, locales, type Locale, ui } from '@/lib/i18n';
+const lessons=[
+{n:'01',title:'Musik erzeugt Zeit',text:'Der Ausgangspunkt: Ein Werk befindet sich nicht nur in einer messbaren Zeit. Durch Wiederholung, Erwartung, Nachklang, Gleichzeitigkeit und Rückwirkung erzeugt es eine eigene Zeitordnung.',links:[['Zeitformen','/de/documents/zeitformen'],['Bach: Vier Stimmen, keine Hauptrolle','/de/texts/bach-kunstderfuge']]},
+{n:'02',title:'Mehrere Stimmen gleichzeitig',text:'Kontrapunktische Koexistenz bedeutet: Mehrere Stimmen oder Wahrheiten können gleichzeitig bestehen, ohne dass eine zur bloßen Begleitung der anderen wird.',links:[['Bach – Die Kunst der Fuge','/de/texts/bach-kunstderfuge'],['Kontrakomologisch lesen','/de/documents/lesen']]},
+{n:'03',title:'Zeitformen hören',text:'Nicht jedes Werk organisiert Zeit auf dieselbe Weise. Strukturelle Gleichzeitigkeit, Offenzeit, Resonanzzeit, gerichtete Transformation oder Pulsfluss beschreiben unterschiedliche hörbare Wirkungen.',links:[['Zeitformen der Kontrakomologie','/de/documents/zeitformen'],['Systemmatrix','/de/texts/systemmatrix']]},
+{n:'04',title:'Vorwärts hören, rückwärts verstehen',text:'Ein Ende kann verändern, wie der Anfang verstanden wird. Diese Rückwirkung ist zentral für die bidirektionale Zeitarchitektur.',links:[['Beethoven – Das umgekehrte Werk','/de/texts/beethoven-mondscheinsonate'],['Chopin – Die Schönheit als Ahnung des Verlustes','/de/texts/chopin-op52']]},
+{n:'05',title:'Offenheit, Richtung und Resonanz',text:'Miles Davis, Coltrane und Bill Evans zeigen drei sehr verschiedene Zeitqualitäten: Zeit, die im Spielen entsteht; Zeit, die auf ein Ziel zuläuft; und Zeit, die im Nachklang weiterbesteht.',links:[['Miles Davis – Kind of Blue','/de/texts/davies-kindofblue'],['Coltrane – A Love Supreme','/de/texts/coltrane-alovesupreme'],['Bill Evans – Waltz for Debby / Peace Piece','/de/texts/evans-waltzfordebby']]},
+{n:'06',title:'Ein Werk selbst untersuchen',text:'Jetzt wird aus der Hörhaltung ein Verfahren. Die Diagnosefragen helfen, Stimmen, Richtung, Offenheit, Rückwirkung, Pause und Transformation systematisch wahrzunehmen, ohne das Werk auf eine Schublade zu reduzieren.',links:[['Diagnosefragen','/de/texts/diagnosefragen'],['Systemmatrix','/de/texts/systemmatrix']]},
+{n:'07',title:'Vom Hören zum Machen',text:'Kontrakomologie kann nicht nur beschreiben. Beim Komponieren und Schreiben wird die Zeitfrage selbst zum Gestaltungsmittel: Was soll gleichzeitig bestehen? Was soll offenbleiben? Was soll erst vom Ende her verständlich werden?',links:[['Kontrakomologisches Komponieren','/de/documents/komponieren'],['Kontrakomologisch lesen','/de/documents/lesen'],['Gealjot Lumina','/de/texts/kueper-gealjotlumina'],['Nalgae','/de/texts/nalgae']]}
+];
+export default async function CoursePage({params}:{params:Promise<{locale:string}>}){const {locale:raw}=await params;if(!isLocale(raw))notFound();const locale:Locale=raw,t=ui[locale],de=locale==='de';return <main className="shell"><header className="topbar"><Link className="brand" href={`/${locale}`}>Contracomology</Link><nav className="nav"><Link href={`/${locale}/documents`}>{de?'Publikationen':'Publications'}</Link><Link href={`/${locale}/kg`}>{t.concepts}</Link><span className="langs">{locales.map(l=><Link key={l} className={`pill ${l===locale?'active':''}`} href={`/${l}/course`}>{localeLabel(l)}</Link>)}</span></nav></header><section className="hero course-hero"><p className="eyebrow">{de?'Einführungskurs':'Introduction'}</p><h1>{de?'Kontrakomologisch hören und lesen':'Listening and reading contracomologically'}</h1><p className="lede">{de?'Sieben Schritte vom ersten Hören zur eigenen Analyse. Keine Vorkenntnisse nötig – Ausgangspunkt ist immer das Werk selbst.':'A guided introduction is currently available in German.'}</p></section>{de?<section className="course-path">{lessons.map((l,i)=><article className="lesson" key={l.n}><div className="lesson-number">{l.n}</div><div><p className="lesson-kicker">Lektion {l.n}</p><h2>{l.title}</h2><p>{l.text}</p><div className="lesson-links">{l.links.map(([name,href])=><Link key={href} href={href}>{name} →</Link>)}</div>{i<lessons.length-1&&<span className="lesson-next">↓</span>}</div></article>)}</section>:<section className="library-section"><p className="section-lede">The complete introductory course is currently available in German. Editorial translations will follow.</p></section>}<footer className="subpage-footer"><div className="footer-links"><Link href={`/${locale}/legal/imprint`}>{de?'Impressum':'Imprint'}</Link><Link href={`/${locale}/legal/privacy`}>{de?'Datenschutz':'Privacy'}</Link><Link href={`/${locale}/legal/terms`}>{de?'Nutzungsbedingungen':'Terms'}</Link><Link href={`/${locale}/legal/ai-transparency`}>{de?'KI-Transparenz':'AI transparency'}</Link></div><p>© 2026 Thomas Peter Küper</p></footer></main>}
