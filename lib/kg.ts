@@ -41,7 +41,11 @@ async function kg<T = Json>(file: string): Promise<T | null> {
 }
 
 function records(obj: Json | null, key: string): Json[] {
-  const r = (obj?.records as Json) ?? obj;
+  const direct = obj?.records;
+  // Some exports carry the record set directly as an array under `records`
+  // (knowledge-domains-0.1.json), others scope it by collection key (kxf-0.6.json).
+  if (Array.isArray(direct)) return direct as Json[];
+  const r = (direct as Json) ?? obj;
   const v = (r as Json)?.[key];
   return Array.isArray(v) ? (v as Json[]) : [];
 }
