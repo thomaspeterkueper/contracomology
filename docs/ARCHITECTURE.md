@@ -25,7 +25,7 @@ Contracomology besitzt nicht:
 
 ## Datenquellen
 
-- KG-Exporte: `exports/kxf-0.6.json`, `exports/entity-registry-0.1.json`, `exports/relation-registry-0.1.json`, `exports/knowledge-domains-0.1.json`
+- KG-Exporte: `exports/contracomology-0.1.json` (kanonischer Begriffsvertrag), `exports/kxf-0.6.json`, `exports/entity-registry-0.1.json`, `exports/relation-registry-0.1.json`, `exports/knowledge-domains-0.1.json`
 - Volltext: `SYS:KUEPER:ota`, `SYS:KUEPER:kueper-com`
 - Legal: KG-/Dokument-Records, nicht lokale Markdown-Dateien
 - Zustand: spaeter SSF, nicht lokale Datenbank

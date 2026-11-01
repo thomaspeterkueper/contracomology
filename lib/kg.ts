@@ -1,9 +1,16 @@
 const KG_REPO = 'thomaspeterkueper/kueper-knowledge-graph';
+// KG exports are read through the KG export API. The KG service holds the credentials for
+// the private KG repository server-side and only serves allowlisted export files, so no
+// repository credentials belong in this consumer.
+const KG_API_BASE = process.env.KG_API_BASE_URL ?? 'https://kueper-knowledge-graph.vercel.app';
 const KG_RAW_ROOT = `https://raw.githubusercontent.com/${KG_REPO}/main`;
-const KG_RAW = `${KG_RAW_ROOT}/exports`;
 const KG_REGISTRY = `${KG_RAW_ROOT}/registry`;
 
 export const CONTRACOMOLOGY_DOMAIN = 'KON';
+// Contracted canonical export for SYS:KUEPER:contracomology
+// (records.activeConsumerContracts in kxf-0.6.json). Historical KXF files must not be
+// used as a substitute for this export (kxf-0.6.json resolution.consumerNote).
+export const CONTRACOMOLOGY_EXPORT = 'contracomology-0.1.json';
 export const LEGAL_DOCUMENT_REFS = {
   imprint: 'DOC:KUE:LEGAL-IMPRINT-DE',
   privacy: 'DOC:KUE:LEGAL-PRIVACY-DE',
@@ -34,11 +41,15 @@ async function fetchText(url: string): Promise<string | null> {
 }
 
 async function kg<T = Json>(file: string): Promise<T | null> {
-  return fetchJson<T>(`${KG_RAW}/${file}`);
+  return fetchJson<T>(`${KG_API_BASE}/api/exports/${file}`);
 }
 
 function records(obj: Json | null, key: string): Json[] {
-  const r = (obj?.records as Json) ?? obj;
+  const direct = obj?.records;
+  // Some exports carry the record set directly as an array under `records`
+  // (knowledge-domains-0.1.json), others scope it by collection key (kxf-0.6.json).
+  if (Array.isArray(direct)) return direct as Json[];
+  const r = (direct as Json) ?? obj;
   const v = (r as Json)?.[key];
   return Array.isArray(v) ? (v as Json[]) : [];
 }
@@ -52,7 +63,10 @@ export type KnowledgeDomain = {
   parent?: string | null;
 };
 
-export type Concept = { id: string; name: string; domain?: string; layer?: string };
+export type Concept = { id: string; name: string; domain?: string; layer?: string; definition?: string; status?: string; epistemicStatus?: string; definitionStatus?: string };
+export type ConceptCatalog =
+  | { available: true; concepts: Concept[] }
+  | { available: false; concepts: [] };
 export type DocumentRef = {
   id: string;
   title?: string;
@@ -76,16 +90,50 @@ export async function getContracomologyDomains(): Promise<KnowledgeDomain[]> {
     }));
 }
 
-export async function getContracomologyConcepts(): Promise<Concept[]> {
-  const data = await kg('kxf-0.6.json');
-  return records(data, 'entities')
-    .filter((e) => e.type === 'Concept' && (e.domain === CONTRACOMOLOGY_DOMAIN || e.domaene === CONTRACOMOLOGY_DOMAIN))
-    .map((e) => ({
-      id: String(e.id ?? e.entity_id),
-      name: String(e.name ?? ''),
-      domain: e.domain || e.domaene ? String(e.domain ?? e.domaene) : undefined,
-      layer: e.layer ? String(e.layer) : undefined,
-    }));
+// The canonical export is not served by the KG API yet, so the exact definition shape is
+// unverified. Accept both documented shapes: a plain string or a locale-keyed object.
+// A definition is only used for the requested locale; otherwise the concept stays pending.
+export function resolveConceptDefinition(value: unknown, locale: string): string | undefined {
+  if (typeof value === 'string') {
+    const text = value.trim();
+    return text || undefined;
+  }
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
+  const entries = Object.entries(value as Record<string, unknown>);
+  const wanted = locale.toLowerCase();
+  const primary = wanted.split('-')[0];
+  const match =
+    entries.find(([key]) => key.toLowerCase() === wanted) ??
+    entries.find(([key]) => key.toLowerCase() === primary) ??
+    entries.find(([key]) => key.toLowerCase().split('-')[0] === primary);
+  if (!match || typeof match[1] !== 'string') return undefined;
+  const text = match[1].trim();
+  return text || undefined;
+}
+
+export async function getContracomologyConcepts(locale: string): Promise<ConceptCatalog> {
+  // Contracted canonical export only. The KG export API does not allowlist it yet
+  // (thomaspeterkueper/kueper-knowledge-graph#196; see
+  // external-tasks/open/KG.KON-000016-contracomology-canonical-concept-export.md), so the
+  // concept section reports an explicit unavailable state instead of substituting the
+  // historical kxf-0.6.json export.
+  const data = await kg(CONTRACOMOLOGY_EXPORT);
+  if (!data) return { available: false, concepts: [] };
+  return {
+    available: true,
+    concepts: records(data, 'entities')
+      .filter((e) => e.type === 'Concept' && (e.domain === CONTRACOMOLOGY_DOMAIN || e.domaene === CONTRACOMOLOGY_DOMAIN))
+      .map((e) => ({
+        id: String(e.id ?? e.entity_id),
+        name: String(e.name ?? ''),
+        domain: e.domain || e.domaene ? String(e.domain ?? e.domaene) : undefined,
+        layer: e.layer ? String(e.layer) : undefined,
+        definition: resolveConceptDefinition(e.definition, locale),
+        status: e.status ? String(e.status) : undefined,
+        epistemicStatus: e.epistemicStatus ? String(e.epistemicStatus) : undefined,
+        definitionStatus: e.definitionStatus ? String(e.definitionStatus) : undefined,
+      })),
+  };
 }
 
 export async function getContracomologyDocuments(): Promise<DocumentRef[]> {
