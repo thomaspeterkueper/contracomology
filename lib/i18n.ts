@@ -31,6 +31,10 @@ export const ui = {
     open: 'Öffnen',
     emptyDomain:
       'Diese Inhalte werden vorbereitet und erscheinen, sobald sie redaktionell freigegeben sind.',
+    definitionPending:
+      'Die Definition dieses Begriffs ist im Knowledge Graph noch nicht redaktionell freigegeben.',
+    conceptsUnavailable:
+      'Der kanonische Knowledge-Graph-Export für Begriffe ist noch nicht über die KG-API verfügbar. Die Begriffe erscheinen, sobald der Exportvertrag bereitgestellt ist.',
     startCourse: 'Kurs öffnen',
     openExplorer: 'Begriffe ansehen',
     openDocuments: 'Bibliothek öffnen',
@@ -57,6 +61,10 @@ export const ui = {
     open: 'Open',
     emptyDomain:
       'These contents are being prepared and will appear after editorial release.',
+    definitionPending:
+      'The definition of this concept has not yet been editorially released in the Knowledge Graph.',
+    conceptsUnavailable:
+      'The canonical Knowledge Graph concept export is not yet available through the KG API. Concepts will appear once the export contract is provided.',
     startCourse: 'Open course',
     openExplorer: 'Open concepts',
     openDocuments: 'Open library',
@@ -83,6 +91,10 @@ export const ui = {
     open: '열기',
     emptyDomain:
       '이 콘텐츠는 준비 중이며 편집 승인 후 표시됩니다.',
+    definitionPending:
+      '이 개념의 정의는 아직 Knowledge Graph에서 편집 승인되지 않았습니다.',
+    conceptsUnavailable:
+      '표준 Knowledge Graph 개념 내보내기는 아직 KG API에서 제공되지 않습니다. 내보내기 계약이 제공되면 개념이 표시됩니다.',
     startCourse: '과정 열기',
     openExplorer: '개념 열기',
     openDocuments: '라이브러리 열기',
@@ -90,3 +102,7 @@ export const ui = {
       '제공자, 연락처 및 개인정보 관련 법적 정보.',
   },
 } satisfies Record<Locale, Record<string, string>>;
+
+export function conceptDefinitionText(definition: string | undefined, locale: Locale): string {
+  return definition ?? ui[locale].definitionPending;
+}

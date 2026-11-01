@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getContracomologyConcepts, getContracomologyDomains } from '@/lib/kg';
-import { isLocale, localeLabel, locales, type Locale, ui } from '@/lib/i18n';
+import { conceptDefinitionText, isLocale, localeLabel, locales, type Locale, ui } from '@/lib/i18n';
 
 export const revalidate = 3600;
 
@@ -10,9 +10,9 @@ export default async function KgPage({ params }: { params: Promise<{ locale: str
   if (!isLocale(rawLocale)) notFound();
   const locale: Locale = rawLocale;
   const t = ui[locale];
-  const [domains, concepts] = await Promise.all([
+  const [domains, conceptCatalog] = await Promise.all([
     getContracomologyDomains(),
-    getContracomologyConcepts(),
+    getContracomologyConcepts(locale),
   ]);
 
   return (
@@ -52,12 +52,14 @@ export default async function KgPage({ params }: { params: Promise<{ locale: str
       <section>
         <h2>{t.concepts}</h2>
         <div className="list">
-          {concepts.length ? concepts.map((c) => (
-            <article className="item" key={c.id}>
-              <h3>{c.name || c.id}</h3>
-              {c.definition ? <p>{c.definition}</p> : c.definitionStatus === 'pending_definition' ? <p>{t.emptyDomain}</p> : null}
-            </article>
-          )) : <p className="empty">{t.emptyDomain}</p>}
+          {conceptCatalog.available ? (
+            conceptCatalog.concepts.length ? conceptCatalog.concepts.map((c) => (
+              <article className="item" key={c.id}>
+                <h3>{c.name || c.id}</h3>
+                <p>{conceptDefinitionText(c.definition, locale)}</p>
+              </article>
+            )) : <p className="empty">{t.emptyDomain}</p>
+          ) : <p className="empty">{t.conceptsUnavailable}</p>}
         </div>
       </section>
     <footer className="subpage-footer"><div className="footer-links"><Link href={`/${locale}/legal/imprint`}>{locale === 'de' ? 'Impressum' : 'Imprint'}</Link><Link href={`/${locale}/legal/privacy`}>{locale === 'de' ? 'Datenschutz' : 'Privacy'}</Link><Link href={`/${locale}/legal/terms`}>{locale === 'de' ? 'Nutzungsbedingungen' : 'Terms'}</Link><Link href={`/${locale}/legal/ai-transparency`}>{locale === 'de' ? 'KI-Transparenz' : 'AI transparency'}</Link><a href="https://www.thomas-kueper.de/" rel="external">Thomas Peter Küper</a></div><p>© 2026 Thomas Peter Küper</p></footer></main>
