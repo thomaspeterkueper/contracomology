@@ -32,18 +32,18 @@ export default async function KgPage({ params }: { params: Promise<{ locale: str
         <div>
           <p className="eyebrow">{t.kgExplorer}</p>
           <h1>{t.kgExplorer}</h1>
-          <p className="lede">{t.kgLede}</p>
+          <p className="lede">{locale === 'de' ? 'Zentrale Begriffe, Zeitformen und Denkfiguren der Kontrakomologie.' : locale === 'en' ? 'Core concepts, forms of time and patterns of thought in Contracomology.' : 'Contracomology의 핵심 개념, 시간 형식과 사고 구조.'}</p>
         </div>
       </section>
 
       <section>
-        <h2>Domains</h2>
+        <h2>{locale === 'de' ? 'Themenfelder' : locale === 'en' ? 'Fields' : '주제 영역'}</h2>
         <div className="list">
           {domains.length ? domains.map((d) => (
             <article className="item" key={d.id}>
               <h3>{d.title || d.id}</h3>
               <p>{d.description ?? t.emptyDomain}</p>
-              <p className="meta">{d.id} · {d.code} · {d.level}</p>
+              
             </article>
           )) : <p className="empty">{t.emptyDomain}</p>}
         </div>
@@ -56,11 +56,10 @@ export default async function KgPage({ params }: { params: Promise<{ locale: str
             <article className="item" key={c.id}>
               <h3>{c.name || c.id}</h3>
               {c.definition ? <p>{c.definition}</p> : c.definitionStatus === 'pending_definition' ? <p>{t.emptyDomain}</p> : null}
-              <p className="meta">{c.id}{c.domain ? ` · ${c.domain}` : ''}{c.epistemicStatus ? ` · [${c.epistemicStatus}]` : ''}{c.status ? ` · ${c.status}` : ''}</p>
             </article>
           )) : <p className="empty">{t.emptyDomain}</p>}
         </div>
       </section>
-    </main>
+    <footer className="subpage-footer"><div className="footer-links"><Link href={`/${locale}/legal/imprint`}>{locale === 'de' ? 'Impressum' : 'Imprint'}</Link><Link href={`/${locale}/legal/privacy`}>{locale === 'de' ? 'Datenschutz' : 'Privacy'}</Link><Link href={`/${locale}/legal/terms`}>{locale === 'de' ? 'Nutzungsbedingungen' : 'Terms'}</Link><Link href={`/${locale}/legal/ai-transparency`}>{locale === 'de' ? 'KI-Transparenz' : 'AI transparency'}</Link><a href="https://www.thomas-kueper.de/" rel="external">Thomas Peter Küper</a></div><p>© 2026 Thomas Peter Küper</p></footer></main>
   );
 }

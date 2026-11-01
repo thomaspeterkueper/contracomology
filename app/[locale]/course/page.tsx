@@ -1,73 +1,11 @@
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { getContracomologyConcepts, getContracomologyDomains } from '@/lib/kg';
-import { isLocale, localeLabel, locales, type Locale, ui } from '@/lib/i18n';
-
-export const revalidate = 3600;
-
-export default async function CoursePage({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale: rawLocale } = await params;
-  if (!isLocale(rawLocale)) notFound();
-  const locale: Locale = rawLocale;
-  const t = ui[locale];
-  const [domains, concepts] = await Promise.all([
-    getContracomologyDomains(),
-    getContracomologyConcepts(),
-  ]);
-
-  return (
-    <main className="shell">
-      <header className="topbar">
-        <Link className="brand" href={`/${locale}`}>Contracomology</Link>
-        <nav className="nav">
-          <Link href={`/${locale}`}>{t.title}</Link>
-          <Link href={`/${locale}/kg`}>{t.concepts}</Link>
-          <Link href={`/${locale}/documents`}>{t.documents}</Link>
-          <span className="langs">
-            {locales.map((l) => <Link key={l} className={`pill ${l === locale ? 'active' : ''}`} href={`/${l}/course`}>{localeLabel(l)}</Link>)}
-          </span>
-        </nav>
-      </header>
-
-      <section className="hero">
-        <div>
-          <p className="eyebrow">{t.course}</p>
-          <h1>{t.academy}</h1>
-          <p className="lede">{t.subtitle}</p>
-        </div>
-        <aside className="card">
-          <p>{locale === 'de'
-            ? 'Die Kursoberfläche folgt ausschließlich den im Knowledge Graph freigegebenen Domänen und Begriffen.'
-            : locale === 'en'
-              ? 'The course surface follows only domains and concepts released in the Knowledge Graph.'
-              : '과정 화면은 Knowledge Graph에 공개된 도메인과 개념만 따릅니다.'}</p>
-        </aside>
-      </section>
-
-      <section>
-        <h2>{locale === 'de' ? 'Domänen' : locale === 'en' ? 'Domains' : '도메인'}</h2>
-        <div className="list">
-          {domains.length ? domains.map((domain) => (
-            <article className="item" key={domain.id}>
-              <p className="meta">{domain.id} · {domain.level}</p>
-              <h2>{domain.title || domain.id}</h2>
-              {domain.description ? <p>{domain.description}</p> : null}
-            </article>
-          )) : <p className="empty">{t.emptyDomain}</p>}
-        </div>
-      </section>
-
-      <section>
-        <h2>{t.concepts}</h2>
-        <div className="list">
-          {concepts.length ? concepts.map((concept) => (
-            <article className="item" key={concept.id}>
-              <p className="meta">{concept.id}{concept.layer ? ` · ${concept.layer}` : ''}</p>
-              <h2>{concept.name || concept.id}</h2>
-            </article>
-          )) : <p className="empty">{t.emptyDomain}</p>}
-        </div>
-      </section>
-    </main>
-  );
-}
+import Link from 'next/link'; import { notFound } from 'next/navigation'; import { isLocale, localeLabel, locales, type Locale, ui } from '@/lib/i18n';
+const lessons=[
+{n:'01',title:'Musik erzeugt Zeit',text:'Der Ausgangspunkt: Ein Werk befindet sich nicht nur in einer messbaren Zeit. Durch Wiederholung, Erwartung, Nachklang, Gleichzeitigkeit und Rückwirkung erzeugt es eine eigene Zeitordnung.',exercise:"Spiele oder erinnere ein vertrautes Musikstück. Ignoriere zunächst Stil und Bedeutung. Notiere nur: Wann scheint Zeit zu drängen, zu stehen, sich zu öffnen oder nachzuklingen?",links:[['Zeitformen','/de/documents/zeitformen'],['Bach: Vier Stimmen, keine Hauptrolle','/de/texts/bach-kunstderfuge']]},
+{n:'02',title:'Mehrere Stimmen gleichzeitig',text:'Kontrapunktische Koexistenz bedeutet: Mehrere Stimmen oder Wahrheiten können gleichzeitig bestehen, ohne dass eine zur bloßen Begleitung der anderen wird.',exercise:"Höre einen kurzen polyphonen Abschnitt zweimal. Folge beim ersten Mal nur einer Stimme. Beim zweiten Mal versuche, mindestens zwei Linien zugleich als eigenständig wahrzunehmen. Was entsteht zwischen ihnen?",links:[['Bach – Die Kunst der Fuge','/de/texts/bach-kunstderfuge'],['Kontrakomologisch lesen','/de/documents/lesen']]},
+{n:'03',title:'Zeitformen hören',text:'Nicht jedes Werk organisiert Zeit auf dieselbe Weise. Strukturelle Gleichzeitigkeit, Offenzeit, Resonanzzeit, gerichtete Transformation oder Pulsfluss beschreiben unterschiedliche hörbare Wirkungen.',exercise:"Wähle zwei sehr verschiedene Stücke. Beschreibe ihre Zeitwirkung zunächst ohne Fachbegriffe. Ordne erst danach probeweise eine Zeitform zu – und notiere, was durch die Zuordnung nicht erfasst wird.",links:[['Zeitformen der Kontrakomologie','/de/documents/zeitformen'],['Systemmatrix','/de/texts/systemmatrix']]},
+{n:'04',title:'Vorwärts hören, rückwärts verstehen',text:'Ein Ende kann verändern, wie der Anfang verstanden wird. Diese Rückwirkung ist zentral für die bidirektionale Zeitarchitektur.',exercise:"Höre oder lies ein Werk bis zum Ende und kehre unmittelbar zum Anfang zurück. Nenne eine Stelle, die jetzt etwas anderes bedeutet, obwohl sie unverändert geblieben ist.",links:[['Beethoven – Das umgekehrte Werk','/de/texts/beethoven-mondscheinsonate'],['Chopin – Die Schönheit als Ahnung des Verlustes','/de/texts/chopin-op52']]},
+{n:'05',title:'Offenheit, Richtung und Resonanz',text:'Miles Davis, Coltrane und Bill Evans zeigen drei sehr verschiedene Zeitqualitäten: Zeit, die im Spielen entsteht; Zeit, die auf ein Ziel zuläuft; und Zeit, die im Nachklang weiterbesteht.',exercise:"Vergleiche Davis, Coltrane und Evans oder drei andere Werke. Frage jeweils: Entsteht der nächste Moment offen, läuft er auf etwas zu oder bleibt etwas im Nachklang gegenwärtig?",links:[['Miles Davis – Kind of Blue','/de/texts/davies-kindofblue'],['Coltrane – A Love Supreme','/de/texts/coltrane-alovesupreme'],['Bill Evans – Waltz for Debby / Peace Piece','/de/texts/evans-waltzfordebby']]},
+{n:'06',title:'Ein Werk selbst untersuchen',text:'Jetzt wird aus der Hörhaltung ein Verfahren. Die Diagnosefragen helfen, Stimmen, Richtung, Offenheit, Rückwirkung, Pause und Transformation systematisch wahrzunehmen, ohne das Werk auf eine Schublade zu reduzieren.',exercise:"Wähle ein Werk, das hier noch nicht analysiert wurde. Beantworte zunächst nur drei Diagnosefragen, für die du tatsächlich Beobachtungen hast. Vermeide eine Zeitform zu behaupten, bevor die Beobachtungen sie tragen.",links:[['Diagnosefragen','/de/texts/diagnosefragen'],['Systemmatrix','/de/texts/systemmatrix']]},
+{n:'07',title:'Vom Hören zum Machen',text:'Kontrakomologie kann nicht nur beschreiben. Beim Komponieren und Schreiben wird die Zeitfrage selbst zum Gestaltungsmittel: Was soll gleichzeitig bestehen? Was soll offenbleiben? Was soll erst vom Ende her verständlich werden?',exercise:"Entwirf acht Takte, einen Absatz oder eine kurze Szene. Lege vorher nur eine Zeitfrage fest: Was soll gleichzeitig bestehen, offenbleiben oder erst vom Ende her verständlich werden? Prüfe anschließend, ob das Ergebnis diese Wirkung tatsächlich erzeugt.",links:[['Kontrakomologisches Komponieren','/de/documents/komponieren'],['Kontrakomologisch lesen','/de/documents/lesen'],['Gealjot Lumina','/de/texts/kueper-gealjotlumina'],['Nalgae','/de/texts/nalgae']]}
+];
+export default async function CoursePage({params}:{params:Promise<{locale:string}>}){const {locale:raw}=await params;if(!isLocale(raw))notFound();const locale:Locale=raw,t=ui[locale],de=locale==='de';return <main className="shell"><header className="topbar"><Link className="brand" href={`/${locale}`}>Contracomology</Link><nav className="nav"><Link href={`/${locale}/documents`}>{de?'Publikationen':'Publications'}</Link><Link href={`/${locale}/kg`}>{t.concepts}</Link><span className="langs">{locales.map(l=><Link key={l} className={`pill ${l===locale?'active':''}`} href={`/${l}/course`}>{localeLabel(l)}</Link>)}</span></nav></header><section className="hero course-hero"><p className="eyebrow">{de?'Einführungskurs':'Introduction'}</p><h1>{de?'Kontrakomologisch hören und lesen':'Listening and reading contracomologically'}</h1><p className="lede">{de?'Sieben Schritte vom ersten Hören zur eigenen Analyse. Keine Vorkenntnisse nötig – Ausgangspunkt ist immer das Werk selbst.':'A guided introduction is currently available in German.'}</p></section>{de ? <><section className="course-path">{lessons.map((l,i)=><article className="lesson" key={l.n}><div className="lesson-number">{l.n}</div><div><p className="lesson-kicker">Lektion {l.n}</p><h2>{l.title}</h2><p>{l.text}</p><aside className="exercise"><p className="exercise-label">Übung</p><p>{l.exercise}</p></aside><div className="lesson-links">{l.links.map(([name,href])=><Link key={href} href={href}>{name} →</Link>)}</div>{i<lessons.length-1&&<span className="lesson-next">↓</span>}</div></article>)}</section><section className="final-exercise"><p className="section-label">Abschlussübung</p><h2>Eine eigene kontrakomologische Analyse</h2><p className="section-lede">Wähle ein Musikstück, einen Text oder eine Szene, die in diesem Kurs noch nicht behandelt wurde. Ziel ist keine richtige Einordnung, sondern eine nachvollziehbare Beobachtung.</p><ol><li><strong>Erstes Hören oder Lesen:</strong> Notiere die Zeitwirkung in Alltagssprache, ohne Fachbegriffe.</li><li><strong>Stimmen und Ebenen:</strong> Was existiert gleichzeitig und bleibt eigenständig?</li><li><strong>Richtung:</strong> Wohin scheint die Zeit zu führen – oder verweigert sie gerade ein Ziel?</li><li><strong>Pause und Nachklang:</strong> Wo trägt Abwesenheit, Stille oder Erinnerung selbst Zeit?</li><li><strong>Rückwirkung:</strong> Verändert das Ende etwas am Anfang?</li><li><strong>Zweites Hören oder Lesen:</strong> Prüfe deine erste Beobachtung. Was hält stand, was musst du verwerfen?</li><li><strong>Erst jetzt benennen:</strong> Nutze eine bekannte Zeitform, wenn sie wirklich passt – oder beschreibe eine andere, wenn das Werk etwas Neues zeigt.</li></ol><p className="course-principle">Die Theorie folgt dem Werk. Nicht umgekehrt.</p><div className="lesson-links"><Link href="/de/texts/diagnosefragen">Diagnosefragen verwenden →</Link><Link href="/de/texts/systemmatrix">Systemmatrix öffnen →</Link></div></section></> : <section className="library-section"><p className="section-lede">The complete introductory course is currently available in German. Editorial translations will follow.</p></section>}<footer className="subpage-footer"><div className="footer-links"><Link href={`/${locale}/legal/imprint`}>{de?'Impressum':'Imprint'}</Link><Link href={`/${locale}/legal/privacy`}>{de?'Datenschutz':'Privacy'}</Link><Link href={`/${locale}/legal/terms`}>{de?'Nutzungsbedingungen':'Terms'}</Link><Link href={`/${locale}/legal/ai-transparency`}>{de?'KI-Transparenz':'AI transparency'}</Link></div><p>© 2026 Thomas Peter Küper</p></footer></main>}

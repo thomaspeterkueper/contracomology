@@ -17,8 +17,8 @@ export const ui = {
     subtitle: 'Analytische Methode zur Beschreibung von Zeitstrukturen in Musik und Literatur.',
     claim:
       'Die Kontrakomologie beschreibt, wie Werke Zeit erzeugen — nicht in welcher Zeit sie existieren. Sie entwickelt ein präzises Vokabular für Zeitstrukturen in Musik und Literatur.',
-    kgLede: 'Begriffe und Domänen aus dem Knowledge Graph — nur Einträge, die vom Kurator freigegeben sind.',
-    docsLede: 'Analysen und Texte aus dem Archiv — Volltext liegt in OTA und kueper.com.',
+    kgLede: 'Zentrale Begriffe, Zeitformen und Denkfiguren der Kontrakomologie.',
+    docsLede: 'Analysen, Essays und Texte zur Kontrakomologie.',
     course: 'Einführungskurs',
     academy: 'Akademie',
     kgExplorer: 'Begriffe',
@@ -43,8 +43,8 @@ export const ui = {
     subtitle: 'Analytical method for describing time structures in music and literature.',
     claim:
       'Contracomology describes how works generate time — not in what time they exist. It develops a precise vocabulary for time structures in music and literature.',
-    kgLede: 'Concepts and domains from the Knowledge Graph — only entries released by the curator.',
-    docsLede: 'Analyses and texts from the archive — full text resides in OTA and kueper.com.',
+    kgLede: 'Core concepts, forms of time and patterns of thought in Contracomology.',
+    docsLede: 'Analyses, essays and texts on Contracomology.',
     course: 'Introductory course',
     academy: 'Academy',
     kgExplorer: 'Concepts',
@@ -69,8 +69,8 @@ export const ui = {
     subtitle: '음악과 문학의 시간 구조를 기술하는 분석적 방법론.',
     claim:
       'Contracomology는 작품이 어떻게 시간을 생성하는지를 기술합니다. 음악과 문학의 시간 구조를 위한 정밀한 어휘를 발전시킵니다.',
-    kgLede: '지식 그래프의 개념 및 도메인 — 큐레이터가 승인한 항목만 표시됩니다.',
-    docsLede: '아카이브의 분석 및 텍스트 — 전문은 OTA 및 kueper.com에 있습니다.',
+    kgLede: 'Contracomology의 핵심 개념, 시간 형식과 사고 구조.',
+    docsLede: 'Contracomology에 관한 분석, 에세이와 글.',
     course: '입문 과정',
     academy: '아카데미',
     kgExplorer: '개념',
