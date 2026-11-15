@@ -1,7 +1,7 @@
 # KG.KON-000010 - KG: Legal-Registry sourceRepository korrigieren
 
 Ziel: `SYS:KUEPER:knowledge-graph`
-Status: offen
+Status: done
 Erstellt: 2026-09-09
 Prioritaet: niedrig
 
@@ -20,3 +20,9 @@ Erwarteter Repository-Wert fuer KG-eigene Legal-Volltexte:
 ## Consumer-Verhalten
 
 Contracomology toleriert bis zur Korrektur nicht-konforme Altwerte und faellt fuer KG-eigene Legal-Records auf das KG-Repository zurueck. Es wird keine lokale Textkopie erzeugt.
+
+## Erledigt
+
+**Erledigt:** 2026-11-15 (Claude, Ökosystem-Kreislauf)
+**Umgesetzt:** `kueper-knowledge-graph` Commit 9b3dbab (Merge 296e85a): `sourceRepository` von `DOC:KUE:LEGAL-IMPRINT-DE`, `DOC:KUE:LEGAL-PRIVACY-DE` und `DOC:KUE:LEGAL-TERMS-DE` in `exports/document-references-0.1.json` auf `thomaspeterkueper/kueper-knowledge-graph` gesetzt; `sourcePath` unverändert. Geprüft mit `check_source_of_truth.py`, `docs:check` und `check-document-api.cjs`.
+**contracomology:** Der Fallback für nicht-konforme Altwerte kann bleiben oder später entfernt werden; keine lokale Änderung nötig.
