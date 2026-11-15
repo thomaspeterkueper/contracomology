@@ -40,6 +40,8 @@ Routen werden von Beginn an sprachfaehig gehalten:
 
 Die UI darf uebersetzt werden. Fachliche Definitionen werden erst angezeigt, wenn sie in der jeweiligen autoritativen Quelle vorliegen.
 
+Welche Texte lokal in UI-Dateien stehen duerfen, regelt der Consumer-Vertrag `docs/UI-COPY-BOUNDARY.md`.
+
 ## Offene Systemanforderungen
 
 Anforderungen an KG, SSF, Noxia oder andere Repositories liegen unter `external-tasks/open/` und werden nicht durch lokale Wissensduplikate ersetzt.
